@@ -1,0 +1,11 @@
+.border {
+    fill: transparent;
+    stroke: black;
+    stroke-width: 2;
+}
+
+.player {
+    fill: transparent;
+    stroke: red;
+    stroke-width: 2;
+}
