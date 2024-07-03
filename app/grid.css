@@ -1,11 +1,11 @@
-.border {
+#gridSvg {
     fill: transparent;
-    stroke: black;
-    stroke-width: 2;
+    stroke: gray;
+    stroke-width: 5;
 }
 
 .mover {
     fill: transparent;
-    stroke: red;
-    stroke-width: 2;
+    stroke: darkgrey;
+    stroke-width: 4;
 }
