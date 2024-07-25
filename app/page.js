@@ -1,12 +1,13 @@
 'use client'
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import './grid.css'
 import Grid from "./Grid";
 import testData from '../test.json'
 
 export default function Home(props) {
-  const [position, setPosition] = useState({ x: 0, y: 0 });
-  const [seq, setSequence] = useState();
+  const [position, setPosition] = useState([]);
+  const [seq, setSeq] = useState();
+  const [progress, setProgress] = useState(0);
   const [size, setSize] = useState({ n: 0, m: 0 });
   const [testing, setTesting] = useState(true);
 
@@ -20,7 +21,7 @@ export default function Home(props) {
   }
 
   const parseJSON = (data) => {
-    setSequence(data["paths"][0]);
+    setSeq(data["paths"]);
     setSize({ n: data.n, m: data.m })
   }
 
@@ -36,23 +37,28 @@ export default function Home(props) {
 
   const consumeMove = () => {
     if (seq && seq.length > 0) {
-      const newCoords = seq[0]
-      setSequence(seq.slice(1))
-      if (Number.isInteger(newCoords)) {
-        setPosition(newCoords)
-      } else {
-        setPosition({ x: newCoords[0], y: newCoords[1] })
-
+      let newCoords = []
+      for (const path of seq) {
+        const nextStep = path[progress];
+        console.log({path, nextStep,progress});
+        if (Number.isInteger(nextStep)) {
+          newCoords.push(nextStep)
+        } else {
+          newCoords.push({ x: nextStep[0], y: nextStep[1] })
+        }
       }
+      setProgress(pr => pr + 1)
+      setPosition(newCoords)
     }
   }
-
+  useEffect(() => { consumeMove() }, [])
   return (
     <main>
       {loadJSON()}
-      <section className="gridHolder" onClick={consumeMove}>
-        <Grid n={size.n} m={size.m} position={position} />
-      </section>
+      {position.length > 0 ?
+        <section className="gridHolder" onClick={consumeMove}>
+          <Grid n={size.n} m={size.m} positions={position} />
+        </section> : <></>}
     </main>
   );
 }

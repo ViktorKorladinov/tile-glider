@@ -1,13 +1,13 @@
-
 'use client'
 import { createElement, useState, useEffect } from "react"
-import { animated, useSpring } from '@react-spring/web'
+import { animated, useSprings } from '@react-spring/web'
 import './grid.css'
 
 const CELL_SIZE = 240;
 
-export default function Grid({ m, n, position }) {
-    const [pos, setPos] = useState({ x: 0, y: 0 });
+export default function Grid({ m, n, positions }) {
+    console.log(positions)
+    const [statePos, setStatePos] = useState(Array(positions.length).fill().map(_ => ({ x: 0, y: 0 })));
 
     const placeTiles = () => {
         let pathData = `
@@ -35,47 +35,58 @@ export default function Grid({ m, n, position }) {
         )
     }
 
-    const [srpingVals, api] = useSpring(() => ({
-        from: pos,
+    const [srpingVals, api] = useSprings(positions.length, idx => ({
+        from: statePos[idx],
     }))
 
     useEffect(() => {
-        if (Number.isInteger(position)) {
-            api.start({
-                from: { x: pos.x, y: pos.y },
-                to: { x: pos.x + 50, y: pos.y + 50 },
-                onResolve: () => {
-                    api.start({
-                        from: { x: pos.x + 50, y: pos.y + 50 },
-                        to: { x: pos.x, y: pos.y },
-                        delay: position * 250
-                    })
-                }
-            })
-        } else {
-            console.log(pos)
-            if (pos.y != (n - 1) * CELL_SIZE && pos.y != 0) {
-                api.start({
+        const newStatePos = []
+        api.start(index => {
+            const pos = statePos[index]
+            const position = positions[index]
+            if (Number.isInteger(position)) {
+                return ({
                     from: { x: pos.x, y: pos.y },
-                    to: [{ x: (position.x) * CELL_SIZE }, { y: (position.y) * CELL_SIZE }].reverse(),
+                    to: { x: pos.x + 50, y: pos.y + 50 },
+                    onResolve: () => {
+                        api.start(index => {
+                            const pos = statePos[index]
+                            const position = positions[index]
+                            return {
+                                from: { x: pos.x + 50, y: pos.y + 50 },
+                                to: { x: pos.x, y: pos.y },
+                                delay: position * 250
+                            }
+                        })
+                    }
                 })
             } else {
-                api.start({
-                    from: { x: pos.x, y: pos.y },
-                    to: [{ x: (position.x) * CELL_SIZE }, { y: (position.y) * CELL_SIZE }],
-                })
+                let res = []
+                if (pos.y != (n - 1) * CELL_SIZE && pos.y != 0) {
+                    res =  {
+                        from: { x: pos.x, y: pos.y },
+                        to: [{ x: (position.x) * CELL_SIZE }, { y: (position.y) * CELL_SIZE }].reverse(),
+                    }
+                } else {
+                    res =  {
+                        from: { x: pos.x, y: pos.y },
+                        to: [{ x: (position.x) * CELL_SIZE }, { y: (position.y) * CELL_SIZE }],
+                    }
+                }
+                newStatePos.push({ x: position.x * CELL_SIZE, y: position.y * CELL_SIZE })
+                return res
             }
-            setPos({ x: position.x * CELL_SIZE, y: position.y * CELL_SIZE })
-        }
+        })
+        setStatePos(newStatePos)
+    }, [positions])
 
-
-
-    }, [position])
     return (
         <svg height={`100vh`} viewBox={`-5 -5 ${n * CELL_SIZE + 10} ${m * CELL_SIZE + 10}`}
             xmlns="http://www.w3.org/2000/svg">
             {placeTiles()}
-            <animated.rect x={srpingVals.x} y={srpingVals.y} width="113" height="113" className="mover" rx="15" />
+            {srpingVals.map((spring,id)=>(
+                <animated.rect key={`mover${id}`} x={spring.x} y={spring.y} width="113" height="113" className="mover" rx="15" />))
+            }
         </svg >
     )
 
