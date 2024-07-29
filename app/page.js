@@ -36,11 +36,10 @@ export default function Home(props) {
   }
 
   const consumeMove = () => {
-    if (seq && seq.length > 0) {
+    if (seq && seq.length > 0 && progress!==seq[0].length) {
       let newCoords = []
       for (const path of seq) {
         const nextStep = path[progress];
-        console.log({path, nextStep,progress});
         if (Number.isInteger(nextStep)) {
           newCoords.push(nextStep)
         } else {
@@ -51,7 +50,12 @@ export default function Home(props) {
       setPosition(newCoords)
     }
   }
-  useEffect(() => { consumeMove() }, [])
+  useEffect(() => {
+    if (progress == 0) {
+      consumeMove()
+      setProgress(1)
+    }
+  }, [])
   return (
     <main>
       {loadJSON()}

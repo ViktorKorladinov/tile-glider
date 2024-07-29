@@ -10,6 +10,19 @@ html,body{
     stroke-width: 5;
 }
 
+#gridSvg rect {
+    transition: all 1s;
+}
+
+#gridSvg  text{
+    stroke: transparent;
+    display: none;
+}
+
+#gridSvg  rect:hover + text{
+    stroke: transparent;
+    display: inline;
+}
 .mover {
     fill: transparent;
     stroke: darkgrey;
