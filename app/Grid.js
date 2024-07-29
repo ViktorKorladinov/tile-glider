@@ -2,11 +2,11 @@
 import { createElement, useState, useEffect } from "react"
 import { animated, useSprings } from '@react-spring/web'
 import './grid.css'
+import { getColorFromGradient } from "./utilities"
 
 const CELL_SIZE = 240;
 
 export default function Grid({ m, n, positions }) {
-    console.log(positions)
     const [statePos, setStatePos] = useState(Array(positions.length).fill().map(_ => ({ x: 0, y: 0 })));
 
     const placeTiles = () => {
@@ -22,7 +22,7 @@ export default function Grid({ m, n, positions }) {
             gridLines.push(<line key={`vert${i}0`} x1={i * CELL_SIZE} x2={i * CELL_SIZE} y1="0" y2={`${CELL_SIZE}`} />)
             gridLines.push(<line key={`vert${i}${i}`} x1={i * CELL_SIZE} x2={i * CELL_SIZE} y1={(m - 1) * CELL_SIZE} y2={m * CELL_SIZE} />)
         }
-        for (let i = 1; i < n; i++) {
+        for (let i = 1; i < m; i++) {
             gridLines.push(<line key={`h${i}0`} y1={i * CELL_SIZE} y2={i * CELL_SIZE} x1="0" x2={`${CELL_SIZE}`} />)
             gridLines.push(<line key={`h${i}${i}`} y1={i * CELL_SIZE} y2={i * CELL_SIZE} x1={(n - 1) * CELL_SIZE} x2={n * CELL_SIZE} />)
         }
