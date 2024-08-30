@@ -1,7 +1,30 @@
-html,body{
+html,
+body {
     margin: 0;
     padding: 0;
-    background-color: rgb(31, 30, 30);
+    /* background-color: rgb(31, 30, 30); */
+    height: 100%;
+}
+
+main{
+    height: 100%;
+}
+
+.gridHolder {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+iframe {
+    flex-grow: 1;
+    /* height: 300px;
+    width: 600px */
+    border: none;
+}
+
+svg{
+    flex-grow: 2;
 }
 
 #gridSvg {
@@ -10,31 +33,43 @@ html,body{
     stroke-width: 5;
 }
 
-#gridSvg rect {
-    transition: all 1s;
-}
-
-#gridSvg  text{
+#gridSvg text {
     stroke: transparent;
     display: none;
 }
 
-#gridSvg  rect:hover {
+#gridSvg rect:hover {
     cursor: pointer;
 }
 
-#gridSvg  rect:hover + text{
+#gridSvg rect:hover+text {
     stroke: transparent;
     display: inline;
 }
+
 .mover {
-    fill: transparent;
     stroke: darkgrey;
     fill: rgb(75, 75, 75);
     stroke-width: 4;
 }
 
-.gridHolder{
+.mover.w {
+    fill: aquamarine;
+}
+
+.mover.t {
+    fill: red;
+}
+
+.mover.l {
+    fill: yellow;
+}
+
+.mover.e {
+    fill: rgb(0, 162, 255);
+}
+
+.gridHolder {
     display: flex;
     align-content: center;
     justify-content: center;

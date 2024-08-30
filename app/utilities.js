@@ -1,4 +1,4 @@
-export function getColorFromGradient(index, length) {
+export function getColorFromGradientRGB(index, length) {
     // if (index==0) return `transparent`
     const normalizedIndex = 1 - index / (length - 1);
     const red = Math.round(255 * (1 - normalizedIndex));
@@ -6,4 +6,10 @@ export function getColorFromGradient(index, length) {
     const green = 0
     const opacity = (1-normalizedIndex)
     return `rgba(${red}, ${green}, ${blue}, ${opacity})`;
+}
+
+export function getColorFromGradient(index, length) {
+    const normalizedIndex = index / (length - 1);
+    const color =  `hsl(${normalizedIndex * 20}, 100%, ${normalizedIndex*100}%)`
+    return color;
 }

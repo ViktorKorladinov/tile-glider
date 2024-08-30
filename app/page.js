@@ -10,6 +10,7 @@ export default function Home(props) {
   const [progress, setProgress] = useState(0);
   const [size, setSize] = useState({ n: 0, m: 0 });
   const [testing, setTesting] = useState(true);
+  const [ticks, setTicks] = useState(0);
 
   function loadJSON() {
     if (size.n != 0) return
@@ -36,33 +37,39 @@ export default function Home(props) {
   }
 
   const consumeMove = () => {
-    if (seq && seq.length > 0 && progress!==seq[0].length) {
+    if (seq && seq.length > 0 && progress !== seq[0].length) {
       let newCoords = []
       for (const path of seq) {
         const nextStep = path[progress];
-        if (Number.isInteger(nextStep)) {
-          newCoords.push(nextStep)
-        } else {
-          newCoords.push({ x: nextStep[0], y: nextStep[1] })
-        }
+        newCoords.push(nextStep)
       }
       setProgress(pr => pr + 1)
       setPosition(newCoords)
+      setTicks(t => t + 1)
     }
   }
+
   useEffect(() => {
-    if (progress == 0) {
-      consumeMove()
+    if (seq) {
+      const initCoords = []
+      for (const path of seq) {
+        const init = path[0];
+        initCoords.push(init)
+      }
+      setPosition(initCoords)
       setProgress(1)
     }
-  }, [])
+  }, [seq])
+
   return (
     <main>
       {loadJSON()}
       {position.length > 0 ?
         <section className="gridHolder" onClick={consumeMove}>
+          <iframe src="./Medicinegraph1.html"  title="Gantt"></iframe> 
           <Grid n={size.n} m={size.m} positions={position} />
-        </section> : <></>}
+        </section> : <p>Loading...</p>}
+      <h1 style={{ position: 'absolute', color: 'white', top: '350px' }}>{progress}</h1>
     </main>
   );
 }
