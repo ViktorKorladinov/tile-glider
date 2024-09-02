@@ -103,7 +103,6 @@ export default function Grid({ m, n, positions }) {
     // Animate all movers(old pos-> new pos acquired from prop postions)
     useEffect(() => {
         const newStatePos = []
-        console.log(statePos[0]);
 
         api.start(index => {
             const pos = statePos[index]
