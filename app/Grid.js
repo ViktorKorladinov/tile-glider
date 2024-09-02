@@ -4,6 +4,7 @@ import { animated, useSprings } from '@react-spring/web'
 import './grid.css'
 import Tile from "./Tile"
 import dispenserInfo from '../dispensers.json'
+import patientColors from '../patient_color_dict.json'
 
 
 const CELL_SIZE = 240;
@@ -26,7 +27,7 @@ export default function Grid({ m, n, positions }) {
         }
         for (let index = 1; index < m - 1; index++) {
             leftC.push(<Tile key={`leftV${index}`} name={dispenserInfo[`0x${index}`]} k={`leftV${index}`} w={CELL_SIZE} y={index * CELL_SIZE} />)
-            rightC.push(<Tile key={`rightV${index}`} name={dispenserInfo[`${n-1}x${index}`]} k={`rightV${index}`} w={CELL_SIZE} x={(n - 1) * CELL_SIZE} y={index * CELL_SIZE} />)
+            rightC.push(<Tile key={`rightV${index}`} name={dispenserInfo[`${n - 1}x${index}`]} k={`rightV${index}`} w={CELL_SIZE} x={(n - 1) * CELL_SIZE} y={index * CELL_SIZE} />)
         }
         setUp(upC)
         setDown(downC)
@@ -53,7 +54,7 @@ export default function Grid({ m, n, positions }) {
                 continue
             }
             if (y == 0) {
-                if (up.length == 0) return
+                if (up.length == 0) returnid
                 newUp = newUp.map((val, idx) => {
                     if (idx == x) {
                         const temp = val.props.idx ? val.props.idx : 0
@@ -133,7 +134,8 @@ export default function Grid({ m, n, positions }) {
                 {left}{right}{up}{down}
             </g>
             {srpingVals.map((spring, id) => (
-                <animated.rect key={`mover${id}`} x={spring.x} y={spring.y} width="113" height="113" className={`mover ${positions[id].mode}`} rx="15" />))
+                
+                <animated.rect key={`mover${id}`} x={spring.x} y={spring.y} width="113" height="113" style={{ fill: patientColors[positions[id].patient] }} rx="15" />))
             }
         </svg >
     )

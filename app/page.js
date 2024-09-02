@@ -10,7 +10,8 @@ export default function Home(props) {
   const [progress, setProgress] = useState(0);
   const [size, setSize] = useState({ n: 0, m: 0 });
   const [testing, setTesting] = useState(true);
-  const [ticks, setTicks] = useState(0);
+  const [animate, setAnimate] = useState(0)
+  const [btnStates, setStates] = useState(["", "", "", "", ""])
 
   function loadJSON() {
     if (size.n != 0) return
@@ -20,6 +21,21 @@ export default function Home(props) {
     }
     return <input type="file" onChange={handleChange} />
   }
+
+  // Animate
+  useEffect(() => {
+    let interval = false
+    if (animate > 0) {
+      interval = setInterval(() => {
+        consumeMove()
+      }, animate);
+    }
+    return () => {
+      if (interval)
+        clearInterval(interval);
+    }
+  }, [progress, animate]);
+
 
   const parseJSON = (data) => {
     setSeq(data["paths"]);
@@ -45,10 +61,10 @@ export default function Home(props) {
       }
       setProgress(pr => pr + 1)
       setPosition(newCoords)
-      setTicks(t => t + 1)
     }
   }
 
+  // place initial position
   useEffect(() => {
     if (seq) {
       const initCoords = []
@@ -61,15 +77,39 @@ export default function Home(props) {
     }
   }, [seq])
 
+  const select = (idx, animation) => {
+    const states = ["", "", "", "", ""]
+
+    if (animation === -1) {
+      if (animate !== 0) {
+        setAnimate(0)
+      }
+      consumeMove()
+    } else {
+      states[idx] = "selected"
+      setAnimate(animation)
+    }
+    setStates(states)
+  }
+
   return (
     <main>
       {loadJSON()}
       {position.length > 0 ?
-        <section className="gridHolder" onClick={consumeMove}>
-          <iframe src="./Medicinegraph1.html"  title="Gantt"></iframe> 
+        <section className="gridHolder" >
           <Grid n={size.n} m={size.m} positions={position} />
+          <iframe src="./Medicinegraph1.html" title="Gantt" />
+          <div className="toolbar">
+            <span>Frame: {progress}/{seq[0].length} </span>
+            {progress !== seq[0].length ? <>
+              <button className={btnStates[0]} onClick={() => select(0, -1)} >Next Frame</button>
+              <button className={btnStates[1]} onClick={() => select(1, 1000)}><span>Play </span> </button>
+              <button className={btnStates[2]} onClick={() => select(2, 500)}><span>Fast </span></button>
+              <button className={btnStates[3]} onClick={() => select(3, 250)}><span>Fastest </span></button>
+              <button onClick={() => select(4, 0)}><span>Pause</span></button>
+            </> : ""}
+          </div>
         </section> : <p>Loading...</p>}
-      <h1 style={{ position: 'absolute', color: 'white', top: '350px' }}>{progress}</h1>
     </main>
   );
 }
