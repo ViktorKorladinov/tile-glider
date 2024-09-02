@@ -74,11 +74,11 @@ iframe {
     stroke: white;
 }
 
-@media screen and (max-width: 1800px) {
+/* @media screen and (max-width: 1800px) {
     .toolbar button span {
         display: none;
     }
-}
+} */
 
 #gridSvg {
     fill: transparent;
@@ -104,26 +104,4 @@ iframe {
     stroke: darkgrey;
     fill: rgb(75, 75, 75);
     stroke-width: 4;
-}
-
-.mover.w {
-    fill: aquamarine;
-}
-
-.mover.t {
-    fill: red;
-}
-
-.mover.l {
-    fill: yellow;
-}
-
-.mover.e {
-    fill: rgb(0, 162, 255);
-}
-
-.gridHolder {
-    display: flex;
-    align-content: center;
-    justify-content: center;
 }

@@ -1,5 +1,5 @@
 'use client'
-import { useEffect, useState } from "react"
+import { useEffect, useState, useRef } from "react"
 import './grid.css'
 import Grid from "./Grid";
 import testData from '../test.json'
@@ -12,6 +12,8 @@ export default function Home(props) {
   const [testing, setTesting] = useState(true);
   const [animate, setAnimate] = useState(0)
   const [btnStates, setStates] = useState(["", "", "", "", ""])
+  const gridIframe = useRef(null);
+  const [contentWindow, setContentWindow] = useState(null)
 
   function loadJSON() {
     if (size.n != 0) return
@@ -59,6 +61,9 @@ export default function Home(props) {
         const nextStep = path[progress];
         newCoords.push(nextStep)
       }
+      if (contentWindow) {
+        contentWindow.moveTo(progress+1)
+      }
       setProgress(pr => pr + 1)
       setPosition(newCoords)
     }
@@ -92,13 +97,19 @@ export default function Home(props) {
     setStates(states)
   }
 
+  const handleGrid = () => {
+    const iframeItem = gridIframe.current.contentWindow
+    iframeItem.moveTo(0)
+    setContentWindow(iframeItem)
+  }
+
   return (
     <main>
       {loadJSON()}
       {position.length > 0 ?
         <section className="gridHolder" >
           <Grid n={size.n} m={size.m} positions={position} />
-          <iframe src="./Medicinegraph1.html" title="Gantt" />
+          <iframe ref={gridIframe} onLoad={handleGrid} src="./Medicinegraph1.html" title="Gantt" />
           <div className="toolbar">
             <span>Frame: {progress}/{seq[0].length} </span>
             {progress !== seq[0].length ? <>
@@ -107,6 +118,7 @@ export default function Home(props) {
               <button className={btnStates[2]} onClick={() => select(2, 500)}><span>Fast </span></button>
               <button className={btnStates[3]} onClick={() => select(3, 250)}><span>Fastest </span></button>
               <button onClick={() => select(4, 0)}><span>Pause</span></button>
+
             </> : ""}
           </div>
         </section> : <p>Loading...</p>}
