@@ -9,8 +9,9 @@ import patientColors from '../patient_color_dict.json'
 
 const CELL_SIZE = 240;
 // m x n
-export default function Grid({ m, n, positions }) {
-    const [statePos, setStatePos] = useState(Array(positions.length).fill().map(_ => ({ x: 0, y: 0 })));
+export default function Grid({ m, n, positions, animate }) {
+    const [statePos, setStatePos] = useState(Array(positions.length).fill(0).map(_ => ({ x: 0, y: 0 })));
+    const statePosC = Array(positions.length).fill(0).map(_ => ({ x: 0, y: 0 }));
     const [up, setUp] = useState([]);
     const [down, setDown] = useState([]);
     const [left, setLeft] = useState([]);
@@ -22,12 +23,12 @@ export default function Grid({ m, n, positions }) {
         const upC = []
         const downC = []
         for (let index = 0; index < n; index++) {
-            upC.push(<Tile key={`upperH${index}`} name={dispenserInfo[`${index}x0`]} k={`upperH${index}`} w={CELL_SIZE} x={index * CELL_SIZE} />)
-            downC.push(<Tile key={`lowerH${index}`} name={dispenserInfo[`${index}x${m - 1}`]} k={`lowerH${index}`} w={CELL_SIZE} x={index * CELL_SIZE} y={(m - 1) * CELL_SIZE} />)
+            upC.push(<Tile speed={animate} key={`upperH${index}`} name={dispenserInfo[`${index}x0`]} k={`upperH${index}`} w={CELL_SIZE} x={index * CELL_SIZE} />)
+            downC.push(<Tile speed={animate} key={`lowerH${index}`} name={dispenserInfo[`${index}x${m - 1}`]} k={`lowerH${index}`} w={CELL_SIZE} x={index * CELL_SIZE} y={(m - 1) * CELL_SIZE} />)
         }
         for (let index = 1; index < m - 1; index++) {
-            leftC.push(<Tile key={`leftV${index}`} name={dispenserInfo[`0x${index}`]} k={`leftV${index}`} w={CELL_SIZE} y={index * CELL_SIZE} />)
-            rightC.push(<Tile key={`rightV${index}`} name={dispenserInfo[`${n - 1}x${index}`]} k={`rightV${index}`} w={CELL_SIZE} x={(n - 1) * CELL_SIZE} y={index * CELL_SIZE} />)
+            leftC.push(<Tile speed={animate} key={`leftV${index}`} name={dispenserInfo[`0x${index}`]} k={`leftV${index}`} w={CELL_SIZE} y={index * CELL_SIZE} />)
+            rightC.push(<Tile speed={animate} key={`rightV${index}`} name={dispenserInfo[`${n - 1}x${index}`]} k={`rightV${index}`} w={CELL_SIZE} x={(n - 1) * CELL_SIZE} y={index * CELL_SIZE} />)
         }
         setUp(upC)
         setDown(downC)
@@ -37,7 +38,7 @@ export default function Grid({ m, n, positions }) {
     useEffect(placeTiles, [])
 
     const [srpingVals, api] = useSprings(positions.length, idx => ({
-        from: statePos[idx],
+        from: statePosC[idx],
     }))
 
     // heatmap
@@ -46,11 +47,12 @@ export default function Grid({ m, n, positions }) {
         let newRight = right
         let newUp = up
         let newDown = down
+
         if (up.length === 0) return
 
         for (const pos of positions) {
             const { x, y, mode } = pos
-            if (mode !== "t") {
+            if (mode !== "transit") {
                 continue
             }
             if (y == 0) {
@@ -58,7 +60,7 @@ export default function Grid({ m, n, positions }) {
                 newUp = newUp.map((val, idx) => {
                     if (idx == x) {
                         const temp = val.props.idx ? val.props.idx : 0
-                        return <Tile key={val.props.k} k={val.props.k} name={val.props.name} w={val.props.w} x={val.props.x} y={val.props.y} idx={temp + 1} />
+                        return <Tile speed={val.props.speed} key={val.props.k} k={val.props.k} name={val.props.name} w={val.props.w} x={val.props.x} y={val.props.y} idx={temp + 1} />
                     }
                     return val
                 })
@@ -68,7 +70,7 @@ export default function Grid({ m, n, positions }) {
                 newDown = newDown.map((val, idx) => {
                     if (idx == x) {
                         const temp = val.props.idx ? val.props.idx : 0
-                        return <Tile key={val.props.k} k={val.props.k} name={val.props.name} w={val.props.w} x={val.props.x} y={val.props.y} idx={temp + 1} />
+                        return <Tile speed={val.props.speed} key={val.props.k} k={val.props.k} name={val.props.name} w={val.props.w} x={val.props.x} y={val.props.y} idx={temp + 1} />
                     }
                     return val
                 })
@@ -78,7 +80,7 @@ export default function Grid({ m, n, positions }) {
                 newLeft = newLeft.map((val, idx) => {
                     if (idx + 1 == y) {
                         const temp = val.props.idx ? val.props.idx : 0
-                        return <Tile key={val.props.k} k={val.props.k} name={val.props.name} w={val.props.w} x={val.props.x} y={val.props.y} idx={temp + 1} />
+                        return <Tile speed={val.props.speed} key={val.props.k} k={val.props.k} name={val.props.name} w={val.props.w} x={val.props.x} y={val.props.y} idx={temp + 1} />
                     }
                     return val
                 })
@@ -88,7 +90,7 @@ export default function Grid({ m, n, positions }) {
                 newRight = newRight.map((val, idx) => {
                     if (idx + 1 == y) {
                         const temp = val.props.idx ? val.props.idx : 0
-                        return <Tile key={val.props.k} k={val.props.k} name={val.props.name} w={val.props.w} x={val.props.x} y={val.props.y} idx={temp + 1} />
+                        return <Tile speed={val.props.speed} key={val.props.k} k={val.props.k} name={val.props.name} w={val.props.w} x={val.props.x} y={val.props.y} idx={temp + 1} />
                     }
                     return val
                 })
@@ -129,12 +131,24 @@ export default function Grid({ m, n, positions }) {
     return (
         <svg viewBox={`-5 -5 ${n * CELL_SIZE + 10} ${m * CELL_SIZE + 10}`}
             xmlns="http://www.w3.org/2000/svg">
+            <defs>
+                {srpingVals.map((spring, id) => (
+                    <pattern key={`def${id}`} id={`bgPattern{id}`} patternUnits="userSpaceOnUse" width="25" height="25">
+                        <image href="mover_bg.png" x="0" y="0" width="25" height="25" />
+                    </pattern>
+                ))}
+            </defs>
+
             <g id="gridSvg">
                 {left}{right}{up}{down}
             </g>
             {srpingVals.map((spring, id) => (
-                
-                <animated.rect key={`mover${id}`} x={spring.x} y={spring.y} width="113" height="113" style={{ fill: patientColors[positions[id].patient] }} rx="15" />))
+
+                <animated.rect key={`mover${id}`} x={spring.x} y={spring.y} width="113" height="113" style={{
+                    fill: patientColors[positions[id].patient],
+                    // fill:'transparent',
+                    // fill: 'url("#bgPattern")'
+                }} rx="15" />))
             }
         </svg >
     )

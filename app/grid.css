@@ -2,7 +2,6 @@ html,
 body {
     margin: 0;
     padding: 0;
-    /* background-color: rgb(31, 30, 30); */
     height: 100%;
     max-height: 100vh;
 }
@@ -16,24 +15,59 @@ main {
     display: flex;
     flex-direction: column;
     align-items: center;
-    height: 100%;
+    height: 100vh;
 }
 
 .gridHolder svg {
     flex-grow: 2;
     width: 100%;
+    display: block;
+    z-index: 2;
+}
+
+.gridHolder .barDetached{
+    width: 100%;
+    position: absolute;
+    bottom: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column-reverse;
+    z-index:3
+}
+
+.gridHolder .barDetached iframe{
+    opacity: 10%;
+    width: 50%;
+    z-index: 1;
+}
+
+.gridHolder .barDetached iframe:hover{
+    opacity: 100%;
+    /*width: 100%;*/
+    z-index: 3;
+}
+
+
+.gridHolder .barAttached{
+    width: 100%;
+}
+
+.gridHolder .barAttached iframe{
+    width:100%
+}
+
+.separate{
+    margin-left:20px
 }
 
 iframe {
-    flex-grow: 1;
-    width: 100%;
     border: none;
     min-height: 300px;
 }
 
 .toolbar {
     background-color: rgb(229, 236, 246);
-    width: 30%;
     margin: 15px;
     border-radius: 10px;
     padding: 10px;
@@ -41,6 +75,16 @@ iframe {
     justify-content: space-evenly;
     align-items: center;
     flex-wrap: wrap;
+}
+
+.toolbar > span {
+    margin-right: 15px;
+}
+
+.toolbarWrapper{
+    display: flex;
+    justify-content: center;
+    align-content: center;
 }
 
 .toolbar button {
@@ -58,10 +102,13 @@ iframe {
 
 .toolbar button:hover {
     cursor: pointer;
+    background-color: rgba(36, 36, 89, 0.65);
+    color: white
 }
 
 .toolbar .selected:hover {
     cursor: default;
+    background-color: rgb(36, 36, 89);
 }
 
 .toolbar .selected {
@@ -70,15 +117,28 @@ iframe {
 }
 
 .toolbar .selected img {
-    color: #dd6127;
     stroke: white;
 }
 
-/* @media screen and (max-width: 1800px) {
-    .toolbar button span {
-        display: none;
-    }
-} */
+.chartButtons {
+    display: flex;
+    justify-content: center;
+    margin-left: 15px;
+}
+
+
+.chartButtons :nth-child(1) {
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+    padding-right: 5px;
+    border-right: none;
+}
+
+.chartButtons :nth-child(2) {
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+    padding-left: 5px;
+}
 
 #gridSvg {
     fill: transparent;
@@ -95,7 +155,7 @@ iframe {
     cursor: pointer;
 }
 
-#gridSvg rect:hover+text {
+#gridSvg rect:hover + text {
     stroke: transparent;
     display: inline;
 }
@@ -105,3 +165,4 @@ iframe {
     fill: rgb(75, 75, 75);
     stroke-width: 4;
 }
+
