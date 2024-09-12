@@ -55,40 +55,40 @@ export default function Grid({ m, n, positions, animate }) {
             if (mode !== "transit") {
                 continue
             }
-            if (y == 0) {
-                if (up.length == 0) returnid
+            if (y === 0) {
+                if (up.length === 0) returnid
                 newUp = newUp.map((val, idx) => {
-                    if (idx == x) {
+                    if (idx === x) {
                         const temp = val.props.idx ? val.props.idx : 0
                         return <Tile speed={val.props.speed} key={val.props.k} k={val.props.k} name={val.props.name} w={val.props.w} x={val.props.x} y={val.props.y} idx={temp + 1} />
                     }
                     return val
                 })
             }
-            else if (y == m - 1) {
-                if (down.length == 0) return
+            else if (y === m - 1) {
+                if (down.length === 0) return
                 newDown = newDown.map((val, idx) => {
-                    if (idx == x) {
+                    if (idx === x) {
                         const temp = val.props.idx ? val.props.idx : 0
                         return <Tile speed={val.props.speed} key={val.props.k} k={val.props.k} name={val.props.name} w={val.props.w} x={val.props.x} y={val.props.y} idx={temp + 1} />
                     }
                     return val
                 })
             }
-            else if (x == 0) {
-                if (left.length == 0) return
+            else if (x === 0) {
+                if (left.length === 0) return
                 newLeft = newLeft.map((val, idx) => {
-                    if (idx + 1 == y) {
+                    if (idx + 1 === y) {
                         const temp = val.props.idx ? val.props.idx : 0
                         return <Tile speed={val.props.speed} key={val.props.k} k={val.props.k} name={val.props.name} w={val.props.w} x={val.props.x} y={val.props.y} idx={temp + 1} />
                     }
                     return val
                 })
             }
-            else if (x == n - 1) {
-                if (right.length == 0) return
+            else if (x === n - 1) {
+                if (right.length === 0) return
                 newRight = newRight.map((val, idx) => {
-                    if (idx + 1 == y) {
+                    if (idx + 1 === y) {
                         const temp = val.props.idx ? val.props.idx : 0
                         return <Tile speed={val.props.speed} key={val.props.k} k={val.props.k} name={val.props.name} w={val.props.w} x={val.props.x} y={val.props.y} idx={temp + 1} />
                     }
@@ -105,12 +105,11 @@ export default function Grid({ m, n, positions, animate }) {
     // Animate all movers(old pos-> new pos acquired from prop postions)
     useEffect(() => {
         const newStatePos = []
-
         api.start(index => {
             const pos = statePos[index]
             const position = positions[index]
             let res = []
-            if (pos.y != (n - 1) * CELL_SIZE && pos.y != 0) {
+            if (pos.y !== (n - 1) * CELL_SIZE && pos.y !== 0) {
                 res = {
                     from: { x: pos.x, y: pos.y },
                     to: [{ x: (position.x) * CELL_SIZE }, { y: (position.y) * CELL_SIZE }].reverse(),
@@ -133,8 +132,8 @@ export default function Grid({ m, n, positions, animate }) {
             xmlns="http://www.w3.org/2000/svg">
             <defs>
                 {srpingVals.map((spring, id) => (
-                    <pattern key={`def${id}`} id={`bgPattern{id}`} patternUnits="userSpaceOnUse" width="25" height="25">
-                        <image href="mover_bg.png" x="0" y="0" width="25" height="25" />
+                    <pattern key={`def${id}`} id={`bgPattern{id}`} patternUnits="userSpaceOnUse" width="5" height="5">
+                        <rect width="5" height="5" fill={patientColors[positions[id].patient]} stroke="none"/>
                     </pattern>
                 ))}
             </defs>
@@ -142,13 +141,12 @@ export default function Grid({ m, n, positions, animate }) {
             <g id="gridSvg">
                 {left}{right}{up}{down}
             </g>
-            {srpingVals.map((spring, id) => (
-
-                <animated.rect key={`mover${id}`} x={spring.x} y={spring.y} width="113" height="113" style={{
-                    fill: patientColors[positions[id].patient],
+            {srpingVals.map((spring, id) => {
+                return (<animated.rect key={`mover${id}`} x={spring.x} y={spring.y} width="113" height="113" style={{
+                    // fill: patientColors[positions[id].patient],
                     // fill:'transparent',
-                    // fill: 'url("#bgPattern")'
-                }} rx="15" />))
+                    fillPattern: `url("#bgPattern${id}")`
+                }} rx="15" />)})
             }
         </svg >
     )

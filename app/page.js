@@ -29,19 +29,34 @@ export default function Home(props) {
         return <input type="file" onChange={handleChange}/>
     }
 
-    // Animate
-    useEffect(() => {
-        let interval = false
-        if (animate > 0) {
-            interval = setInterval(() => {
-                consumeMove()
-            }, animate);
-        }
-        return () => {
-            if (interval) clearInterval(interval);
-        }
-    }, [progress, animate]);
+    // Use useRef for mutable variables that we want to persist
+    // without triggering a re-render on their change
+    const requestRef = useRef();
+    const previousTimeRef = useRef();
+    const animateRef = useRef();
+    const progressRef = useRef();
+    const contentWindowRef = useRef();
 
+    const animateV = time => {
+        if (previousTimeRef.current !== undefined) {
+            const deltaTime = time - previousTimeRef.current;
+            // console.log(animate)
+            if (animateRef.current > 0 && deltaTime > 100) {
+                consumeMove()
+                previousTimeRef.current = time;
+
+            }
+        } else {
+            previousTimeRef.current = time;
+        }
+        requestRef.current = requestAnimationFrame(animateV);
+    }
+
+    useEffect(() => {
+        animateRef.animate = 0
+        requestRef.current = requestAnimationFrame(animateV);
+        return () => cancelAnimationFrame(requestRef.current);
+    }, []);
 
     const parseJSON = (data) => {
         setSeq(data["paths"]);
@@ -64,15 +79,23 @@ export default function Home(props) {
         };
     }, []);
 
-    const consumeMove = () => {
-        if (seq && seq.length > 0 && progress !== seq[0].length) {
+    useEffect(() => {
+        progressRef.current = progress
+    }, [progress])
+
+    useEffect(() => {
+        contentWindowRef.current = contentWindow
+    }, [contentWindow])
+
+    const consumeMove = (x, y) => {
+        if (seq && seq.length > 0 && progressRef.current !== seq[0].length) {
             let newCoords = []
             for (const path of seq) {
-                const nextStep = path[progress];
+                const nextStep = path[progressRef.current];
                 newCoords.push(nextStep)
             }
-            if (contentWindow) {
-                contentWindow.moveTo(progress + 1)
+            if (gridIframe.current.contentWindow && gridIframe.current.contentWindow.moveBarTo) {
+                gridIframe.current.contentWindow.moveBarTo(progressRef.current + 1, y)
             }
             setProgress(pr => pr + 1)
             setPosition(newCoords)
@@ -109,7 +132,7 @@ export default function Home(props) {
 
     const handleGrid = () => {
         const iframeItem = gridIframe.current.contentWindow
-        iframeItem.moveTo(progress)
+        iframeItem.moveBarTo(progress)
         setContentWindow(iframeItem)
     }
 
@@ -125,13 +148,18 @@ export default function Home(props) {
                         <span>Frame: {progress}/{seq[0].length} </span>
                         {progress !== seq[0].length ? <>
                             <button className={btnStates[0]} onClick={() => select(0, -1)}>Next Frame</button>
-                            <button className={btnStates[1]+ "separate"} onClick={() => select(1, 500)}><span>Play </span>
+                            <button className={btnStates[1] + "separate"} onClick={() => {
+                                animateRef.current = 1
+                            }}>
+                                <span>Play </span>
                             </button>
                             <button className={btnStates[2]} onClick={() => select(2, 250)}><span>Fast </span>
                             </button>
                             <button className={btnStates[3]} onClick={() => select(3, 100)}><span>Fastest </span>
                             </button>
-                            <button onClick={() => select(4, 0)}><span>Pause</span></button>
+                            <button onClick={() => {
+                                animateRef.current = 0
+                            }}><span>Pause</span></button>
                             <button
                                 className="separate"
                                 onClick={() => setBarMode(state => state === 'barAttached' ? 'barDetached' : 'barAttached')}>
