@@ -175,9 +175,14 @@ export default function Grid_v2({m, n, positions}) {
              xmlns="http://www.w3.org/2000/svg">
             <defs>
                 {srpingVals.map((spring, id) => (
-                    <pattern key={`def${id}`} id={`bgPattern{id}`} patternUnits="userSpaceOnUse" width="5"
-                             height="5">
-                        <rect width="5" height="5" fill={patientColors[positions[id].patient]} stroke="none"/>
+                    <pattern key={`def${id}`} id={`bgPattern${id}`} patternUnits="userSpaceOnUse" width="20"
+                             height="20">
+
+                        <rect width="20" height="20" fill={patientColors[positions[id][progressRef.current].patient]}/>
+                        <path d='M-1,1 l2,-2
+                        M0,20 l20,-20
+                        M19,21 l2,-2'
+                              stroke='black' strokeWidth='4'/>
                     </pattern>))}
             </defs>
 
@@ -185,10 +190,10 @@ export default function Grid_v2({m, n, positions}) {
                 {left}{right}{up}{down}
             </g>
             {srpingVals.map((spring, id) => {
-                return (<animated.rect key={`mover${id}`} x={spring.x} y={spring.y} width="113" height="113" style={{
+                return (<animated.rect key={`mover${id}`} x={spring.x} y={spring.y} width="112" height="112" style={{
                     // fill: patientColors[positions[id].patient],
                     // fill:'transparent',
-                    fillPattern: `url("#bgPattern${id}")`
+                    fill: `url(#bgPattern${id})`
                 }} rx="15"/>)
             })}
         </svg>
