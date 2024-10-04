@@ -34,12 +34,6 @@ export default function Home() {
         }
     }
 
-    useEffect(() => {
-        window.abc = (vtbl) => {
-            console.log(vtbl)
-        };
-    }, []);
-
     loadJSON()
     if (!seq) {
         return <div>Loading..</div>

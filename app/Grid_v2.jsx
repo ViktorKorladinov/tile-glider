@@ -37,7 +37,10 @@ export default function Grid_v2({m, n, positions}) {
         } else {
             previousTimeRef.current = time;
         }
-        requestRef.current = requestAnimationFrame(animateV);
+        if (progressRef.current !== positions[0].length)
+            requestRef.current = requestAnimationFrame(animateV);
+        else
+            progressRef.current -= 1
     }
 
     useEffect(() => {
@@ -49,7 +52,7 @@ export default function Grid_v2({m, n, positions}) {
         return () => cancelAnimationFrame(requestRef.current);
     }, []);
 
-    const consumeMove = (x, y) => {
+    const consumeMove = () => {
         if (positions && positions.length > 0 && progressRef.current !== positions[0].length) {
             let newCoords = []
             for (const path of positions) {
@@ -112,63 +115,36 @@ export default function Grid_v2({m, n, positions}) {
         let newRight = right
         let newUp = up
         let newDown = down
-
+        const horizontalTiles = (val, idx, x) => {
+            if (idx === x) {
+                const temp = val.props.idx ? val.props.idx : 0
+                return <Tile speed={val.props.speed} key={val.props.k} k={val.props.k} name={val.props.name}
+                             w={val.props.w} x={val.props.x} y={val.props.y} idx={temp + 1}/>
+            }
+            return val
+        }
         if (up.length === 0) return
 
         for (const pos of positions) {
-            const {x, y, mode} = pos
+            const {x, y, mode} = pos[progressRef.current]
             if (mode !== "transit") {
                 continue
             }
             if (y === 0) {
-                if (up.length === 0) return
-                newUp = newUp.map((val, idx) => {
-                    if (idx === x) {
-                        const temp = val.props.idx ? val.props.idx : 0
-                        return <Tile speed={val.props.speed} key={val.props.k} k={val.props.k} name={val.props.name}
-                                     w={val.props.w} x={val.props.x} y={val.props.y} idx={temp + 1}/>
-                    }
-                    return val
-                })
+                newUp = newUp.map((val, idx) => horizontalTiles(val, idx, x))
             } else if (y === m - 1) {
-                if (down.length === 0) return
-                newDown = newDown.map((val, idx) => {
-                    if (idx === x) {
-                        const temp = val.props.idx ? val.props.idx : 0
-                        return <Tile speed={val.props.speed} key={val.props.k} k={val.props.k} name={val.props.name}
-                                     w={val.props.w} x={val.props.x} y={val.props.y} idx={temp + 1}/>
-                    }
-                    return val
-                })
+                newDown = newDown.map((val, idx) => horizontalTiles(val, idx, x))
             } else if (x === 0) {
-                if (left.length === 0) return
-                newLeft = newLeft.map((val, idx) => {
-                    if (idx + 1 === y) {
-                        const temp = val.props.idx ? val.props.idx : 0
-                        return <Tile speed={val.props.speed} key={val.props.k} k={val.props.k} name={val.props.name}
-                                     w={val.props.w} x={val.props.x} y={val.props.y} idx={temp + 1}/>
-                    }
-                    return val
-                })
+                newLeft = newLeft.map((val, idx) => horizontalTiles(val, idx, y - 1))
             } else if (x === n - 1) {
-                if (right.length === 0) return
-                newRight = newRight.map((val, idx) => {
-                    if (idx + 1 === y) {
-                        const temp = val.props.idx ? val.props.idx : 0
-                        return <Tile speed={val.props.speed} key={val.props.k} k={val.props.k} name={val.props.name}
-                                     w={val.props.w} x={val.props.x} y={val.props.y} idx={temp + 1}/>
-                    }
-                    return val
-                })
+                newRight = newRight.map((val, idx) => horizontalTiles(val, idx, y - 1))
             }
         }
         setUp(newUp)
         setLeft(newLeft)
         setRight(newRight)
         setDown(newDown)
-    }, [positions])
-
-    console.log('grid render')
+    }, [counter])
 
     return (<>
         <svg viewBox={`-5 -5 ${n * CELL_SIZE + 10} ${m * CELL_SIZE + 10}`}
@@ -178,7 +154,8 @@ export default function Grid_v2({m, n, positions}) {
                     <pattern key={`def${id}`} id={`bgPattern${id}`} patternUnits="userSpaceOnUse" width="20"
                              height="20">
 
-                        <rect width="20" height="20" fill={patientColors[positions[id][progressRef.current].patient]}/>
+                        <rect width="20" height="20"
+                              fill={patientColors[positions[id][progressRef.current].patient]}/>
                         <path d='M-1,1 l2,-2
                         M0,20 l20,-20
                         M19,21 l2,-2'
@@ -191,8 +168,6 @@ export default function Grid_v2({m, n, positions}) {
             </g>
             {srpingVals.map((spring, id) => {
                 return (<animated.rect key={`mover${id}`} x={spring.x} y={spring.y} width="112" height="112" style={{
-                    // fill: patientColors[positions[id].patient],
-                    // fill:'transparent',
                     fill: `url(#bgPattern${id})`
                 }} rx="15"/>)
             })}

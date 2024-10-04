@@ -29,17 +29,18 @@ function Toolbar({counter, length, animate, setAnimate}) {
         setStates(states)
     }
 
+    let iframeItem = gridIframe.current?gridIframe.current.contentWindow:null
+
     useEffect(() => {
-        if (length<100 && counter % 2 === 0) {
-            const iframeItem = gridIframe.current.contentWindow
-            const move = async (count) => iframeItem.moveBarTo(count)
+        if ( counter % 50 === 0) {
+            const move = async (count) => iframeItem.moveBarTo(count, animate*50)
             move(counter).catch(err => console.log(err))
         }
     }, [counter])
 
     const handleGrid = () => {
         const iframeItem = gridIframe.current.contentWindow
-        iframeItem.moveBarTo(1)
+        // iframeItem.moveBarTo(1)
         setContentWindow(iframeItem)
     }
     return (
@@ -49,12 +50,12 @@ function Toolbar({counter, length, animate, setAnimate}) {
                     <span>Frame: {counter}/{length} </span>
                     {counter !== length ? <>
                         <button className={btnStates[0]} onClick={() => select(0, -1)}>Next Frame</button>
-                        <button className={btnStates[1] + "separate"} onClick={() => select(1, 500)}>
+                        <button className={btnStates[1] + " separate"} onClick={() => select(1, 250)}>
                             <span>Play </span>
                         </button>
-                        <button className={btnStates[2]} onClick={() => select(2, 250)}><span>Fast </span>
+                        <button className={btnStates[2]} onClick={() => select(2, 50)}><span>Fast </span>
                         </button>
-                        <button className={btnStates[3]} onClick={() => select(3, 100)}><span>Fastest </span>
+                        <button className={btnStates[3]} onClick={() => select(3, 8)}><span>Fastest </span>
                         </button>
                         <button onClick={() => select(0, -1)}><span>Pause</span></button>
                         <button

@@ -28,7 +28,7 @@ main {
 .gridHolder .barDetached{
     width: 100%;
     position: absolute;
-    bottom: 40px;
+    bottom: 60px;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -37,13 +37,15 @@ main {
 }
 
 .gridHolder .barDetached iframe{
-    opacity: 10%;
-    width: 50%;
+    opacity: 0;
+    width: 100%;
     z-index: 1;
+    transition: opacity 100ms linear;
+    /*animation-direction: reverse;*/
 }
 
-.gridHolder .barDetached iframe:hover{
-    opacity: 100%;
+.gridHolder .barDetached .toolbarWrapper:hover + iframe{
+    opacity: 50%;
     /*width: 100%;*/
     z-index: 3;
 }
@@ -126,7 +128,6 @@ iframe {
     margin-left: 15px;
 }
 
-
 .chartButtons :nth-child(1) {
     border-top-right-radius: 0;
     border-bottom-right-radius: 0;
@@ -155,10 +156,10 @@ iframe {
     cursor: pointer;
 }
 
-#gridSvg rect:hover + text {
-    stroke: transparent;
-    display: inline;
-}
+/*#gridSvg rect:hover + text {*/
+/*    stroke: transparent;*/
+/*    display: inline;*/
+/*}*/
 
 .mover {
     stroke: darkgrey;
