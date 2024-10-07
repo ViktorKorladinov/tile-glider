@@ -2,7 +2,7 @@
 import React, {useEffect, useRef, useState} from 'react';
 import ganttData from "@/gantts.json";
 
-function Toolbar({counter, length, animate, setAnimate}) {
+function Toolbar({counter, length, animate, setAnimate, consumeMove}) {
     const [selectedGantt, setSelectedGantt] = useState(0)
     const [btnStates, setStates] = useState(["", "", "", "", ""])
     const [barMode, setBarMode] = useState('barAttached')
@@ -18,9 +18,12 @@ function Toolbar({counter, length, animate, setAnimate}) {
 
     const select = (idx, animation) => {
         const states = ["", "", "", "", ""]
-        if (animation === -1) {
+        if (animation < 0) {
             if (animate !== 0) {
                 setAnimate(0)
+            }
+            if (animation < -1) {
+                consumeMove()
             }
         } else {
             states[idx] = "selected"
@@ -49,7 +52,7 @@ function Toolbar({counter, length, animate, setAnimate}) {
                 <div className="toolbar">
                     <span>Frame: {counter}/{length} </span>
                     {counter !== length ? <>
-                        <button className={btnStates[0]} onClick={() => select(0, -1)}>Next Frame</button>
+                        <button className={btnStates[0]} onClick={() => select(0, -2)}>Next Frame</button>
                         <button className={btnStates[1] + " separate"} onClick={() => select(1, 250)}>
                             <span>Play </span>
                         </button>

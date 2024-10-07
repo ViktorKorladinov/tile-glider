@@ -37,18 +37,15 @@ main {
 }
 
 .gridHolder .barDetached iframe{
-    opacity: 0;
-    width: 100%;
-    z-index: 1;
-    transition: opacity 100ms linear;
+    display: none;
     /*animation-direction: reverse;*/
 }
 
-.gridHolder .barDetached .toolbarWrapper:hover + iframe{
-    opacity: 50%;
-    /*width: 100%;*/
-    z-index: 3;
-}
+/*.gridHolder .barDetached .toolbarWrapper:hover + iframe{*/
+/*    opacity: 50%;*/
+/*    !*width: 100%;*!*/
+/*    z-index: 3;*/
+/*}*/
 
 
 .gridHolder .barAttached{
@@ -88,6 +85,7 @@ iframe {
     justify-content: center;
     align-content: center;
 }
+
 
 .toolbar button {
     display: flex;
@@ -148,18 +146,18 @@ iframe {
 }
 
 #gridSvg text {
-    stroke: transparent;
-    display: none;
+    stroke: none;
+    fill: rgb(136, 136, 136);
 }
 
-#gridSvg rect:hover {
-    cursor: pointer;
+#gridSvg .notShown text{
+    stroke: none;
+    fill: rgb(136, 136, 136);
 }
 
-/*#gridSvg rect:hover + text {*/
-/*    stroke: transparent;*/
-/*    display: inline;*/
-/*}*/
+.tile rect:hover, .tile text:hover + rect{
+    fill: red;
+}
 
 .mover {
     stroke: darkgrey;

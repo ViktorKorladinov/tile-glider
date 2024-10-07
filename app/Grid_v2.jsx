@@ -48,6 +48,7 @@ export default function Grid_v2({m, n, positions}) {
     }, [speed]);
 
     useEffect(() => {
+        window.abc = ()=>{}
         requestRef.current = requestAnimationFrame(animateV);
         return () => cancelAnimationFrame(requestRef.current);
     }, []);
@@ -56,7 +57,7 @@ export default function Grid_v2({m, n, positions}) {
         if (positions && positions.length > 0 && progressRef.current !== positions[0].length) {
             let newCoords = []
             for (const path of positions) {
-                const nextStep = path[progressRef.current];
+                const nextStep = path[progressRef.current+1];
                 newCoords.push(nextStep)
             }
             api.start(index => {
@@ -172,7 +173,7 @@ export default function Grid_v2({m, n, positions}) {
                 }} rx="15"/>)
             })}
         </svg>
-        <Toolbar counter={counter} length={positions[0].length} animate={speed} setAnimate={setSpeed}/>
+        <Toolbar counter={counter} length={positions[0].length} animate={speed} consumeMove={consumeMove} setAnimate={setSpeed}/>
     </>)
 
 }
