@@ -1,7 +1,7 @@
-import React, {useEffect, useRef, useState} from 'react'
+import React, {memo, useEffect, useRef, useState} from 'react'
 import {getColorFromGradient} from './utilities';
 
-function Tile({w, h = w, x = 0, y = 0, idx = 0, setMedicine,name='Interface', speed = 500}) {
+ const Tile = memo(function NonMemoTile({w, h = w, x = 0, y = 0, idx = 0, setMedicine,name='Interface', speed = 500}){
     let color = getColorFromGradient(idx)
     let tileType = "tile"
     if (name === 'Interface') {
@@ -20,7 +20,7 @@ function Tile({w, h = w, x = 0, y = 0, idx = 0, setMedicine,name='Interface', sp
         setStateX(x+w/2-textWidth/2)
         setStateY(y + h / 2 + 40)
     }, [h, y, idx, x, w]);
-
+    console.log(`Rerender of ${name}`)
     return (
         <g  className={tileType} onMouseEnter={()=>{setMedicine(name)}} onMouseLeave={()=>{setMedicine("")}}>
             <rect y={y} x={x} width={w} height={h} fill={color}
@@ -29,6 +29,6 @@ function Tile({w, h = w, x = 0, y = 0, idx = 0, setMedicine,name='Interface', sp
                   fill='black'>{idx}</text>
         </g>
     )
-}
+})
 
 export default Tile

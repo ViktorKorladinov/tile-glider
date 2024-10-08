@@ -1,5 +1,7 @@
+// noinspection JSValidateTypes
+
 'use client'
-import {useState, useEffect, useRef, cloneElement} from "react"
+import {useState, useEffect, useRef, useCallback} from "react"
 import {animated, useSprings} from '@react-spring/web'
 import './grid.css'
 import Tile from "./Tile"
@@ -15,12 +17,13 @@ export default function Grid_v2({m, n, positions}) {
     const [speed, setSpeed] = useState(0)
     const statePosC = positions.map(arr => ({x: arr[0].x * CELL_SIZE, y: arr[0].y * CELL_SIZE}));
     const moversRefs = useRef(statePosC)
-    const [up, setUp] = useState([]);
-    const [down, setDown] = useState([]);
-    const [left, setLeft] = useState([]);
-    const [right, setRight] = useState([]);
+    const [matrix, setMatrix] = useState(() => {
+        return Array.from({length: m}, () => Array(m).fill(0));
+    });
     const [medicineName, setMedicine] = useState([]);
-
+    const [srpingVals, api] = useSprings(positions.length, idx => ({
+        from: statePosC[idx],
+    }))
     // Use useRef for mutable variables that we want to persist
     // without triggering a re-render on their change
     const requestRef = useRef();
@@ -28,42 +31,20 @@ export default function Grid_v2({m, n, positions}) {
     const animateRef = useRef(0);
     const progressRef = useRef(1);
 
-    const animateV = time => {
-        if (previousTimeRef.current !== undefined) {
-            const deltaTime = time - previousTimeRef.current;
-            if (animateRef.current > 0 && deltaTime > animateRef.current) {
-                consumeMove()
-                previousTimeRef.current = time;
-            }
-        } else {
-            previousTimeRef.current = time;
-        }
-        if (progressRef.current !== positions[0].length)
-            requestRef.current = requestAnimationFrame(animateV);
-        else
-            progressRef.current -= 1
-    }
-
     useEffect(() => {
         animateRef.current = speed
     }, [speed]);
 
-    useEffect(() => {
-        window.abc = ()=>{}
-        requestRef.current = requestAnimationFrame(animateV);
-        return () => cancelAnimationFrame(requestRef.current);
-    }, []);
-
-    const consumeMove = () => {
-        if (positions && positions.length > 0 && progressRef.current !== positions[0].length-1) {
+    const consumeMove = useCallback(() => {
+        if (positions && positions.length > 0 && progressRef.current !== positions[0].length - 1) {
             let newCoords = []
             for (const path of positions) {
-                const nextStep = path[progressRef.current+1];
+                const nextStep = path[progressRef.current + 1];
                 newCoords.push(nextStep)
             }
             api.start(index => {
                 const position = newCoords[index]
-                let res = []
+                let res;
                 const pos = moversRefs.current
                 if (pos.y !== (n - 1) * CELL_SIZE && pos.y !== 0) {
                     res = {
@@ -80,73 +61,55 @@ export default function Grid_v2({m, n, positions}) {
             })
             progressRef.current += 1
             setCounter(ct => ct + 1)
+            const updatedMatrix = [...matrix]; // Update heatmap
+            for (const pos of newCoords) {
+                const {x, y, mode} = pos
+                if (mode !== "transit") {
+                    continue
+                }
+                updatedMatrix[x][y] += 1;
+            }
+            setMatrix(updatedMatrix);
         }
-    }
+    },[api, matrix, n, positions])
+
+    const animateV = useCallback(time => {
+        if (previousTimeRef.current !== undefined) {
+            const deltaTime = time - previousTimeRef.current;
+            if (animateRef.current > 0 && deltaTime > animateRef.current) {
+                consumeMove()
+                previousTimeRef.current = time;
+            }
+        } else {
+            previousTimeRef.current = time;
+        }
+        if (progressRef.current !== positions[0].length)
+            requestRef.current = requestAnimationFrame(animateV);
+        else
+            progressRef.current -= 1
+    },[consumeMove, positions])
+
+    useEffect(() => {
+        window.abc = () => {
+        }
+        requestRef.current = requestAnimationFrame(animateV);
+        return () => cancelAnimationFrame(requestRef.current);
+    }, [animateV]);
+
 
     const placeTiles = () => {
-        const leftC = []
-        const rightC = []
-        const upC = []
-        const downC = []
-        for (let index = 0; index < n; index++) {
-            upC.push(<Tile setMedicine={setMedicine} speed={speed} key={`upperH${index}`} name={dispenserInfo[`${index}x0`]} k={`upperH${index}`}
-                           w={CELL_SIZE} x={index * CELL_SIZE}/>)
-            downC.push(<Tile setMedicine={setMedicine} speed={speed} key={`lowerH${index}`} name={dispenserInfo[`${index}x${m - 1}`]}
-                             k={`lowerH${index}`} w={CELL_SIZE} x={index * CELL_SIZE} y={(m - 1) * CELL_SIZE}/>)
+        let res = []
+        for (let i = 0; i < m; i++) {
+            for (let j = 0; j < n; j++) {
+                if (i === 0 || j === 0 || i === m - 1 || j === n - 1) {
+                    res.push(<Tile setMedicine={setMedicine} speed={speed} key={`${i}x${j}`}
+                                   name={dispenserInfo[`${i}x${j}`]}
+                                   w={CELL_SIZE} x={i*CELL_SIZE} y={j * CELL_SIZE} idx={matrix[i][j]}/>)
+                }
+            }
         }
-        for (let index = 1; index < m - 1; index++) {
-            leftC.push(<Tile setMedicine={setMedicine} speed={speed} key={`leftV${index}`} name={dispenserInfo[`0x${index}`]} k={`leftV${index}`}
-                             w={CELL_SIZE} y={index * CELL_SIZE}/>)
-            rightC.push(<Tile setMedicine={setMedicine} speed={speed} key={`rightV${index}`} name={dispenserInfo[`${n - 1}x${index}`]}
-                              k={`rightV${index}`} w={CELL_SIZE} x={(n - 1) * CELL_SIZE} y={index * CELL_SIZE}/>)
-        }
-        setUp(upC)
-        setDown(downC)
-        setLeft(leftC)
-        setRight(rightC)
+        return res
     }
-    useEffect(placeTiles, [])
-
-    const [srpingVals, api] = useSprings(positions.length, idx => ({
-        from: statePosC[idx],
-    }))
-
-    // heatmap
-    useEffect(() => {
-        let newLeft = left
-        let newRight = right
-        let newUp = up
-        let newDown = down
-        const horizontalTiles = (val, idx, x) => {
-            if (idx === x) {
-                return cloneElement(val, {
-                    idx: val.props.idx ? val.props.idx + 1 : 1,
-                });
-            }
-            return val
-        }
-        if (up.length === 0) return
-
-        for (const pos of positions) {
-            const {x, y, mode} = pos[progressRef.current]
-            if (mode !== "transit") {
-                continue
-            }
-            if (y === 0) {
-                newUp = newUp.map((val, idx) => horizontalTiles(val, idx, x))
-            } else if (y === m - 1) {
-                newDown = newDown.map((val, idx) => horizontalTiles(val, idx, x))
-            } else if (x === 0) {
-                newLeft = newLeft.map((val, idx) => horizontalTiles(val, idx, y - 1))
-            } else if (x === n - 1) {
-                newRight = newRight.map((val, idx) => horizontalTiles(val, idx, y - 1))
-            }
-        }
-        setUp(newUp)
-        setLeft(newLeft)
-        setRight(newRight)
-        setDown(newDown)
-    }, [counter])
 
     return (<>
         <svg viewBox={`-5 -5 ${n * CELL_SIZE + 10} ${m * CELL_SIZE + 10}`}
@@ -157,7 +120,7 @@ export default function Grid_v2({m, n, positions}) {
                              height="20">
 
                         <rect width="20" height="20"
-                              fill={patientColors[positions[id][progressRef.current].patient]}/>
+                              fill={patientColors[positions[id][progressRef.current]['patient']]}/>
                         <path d='M-1,1 l2,-2
                         M0,20 l20,-20
                         M19,21 l2,-2'
@@ -166,15 +129,16 @@ export default function Grid_v2({m, n, positions}) {
             </defs>
 
             <g id="gridSvg">
-                {left}{right}{up}{down}
+                {placeTiles()}
             </g>
             {srpingVals.map((spring, id) => {
-                return (<animated.rect key={`mover${id}`} x={spring.x} y={spring.y} width="112" height="112" style={{
+                return (<animated.rect key={`mover${id}`} x={spring['x']} y={spring['y']} width="112" height="112" style={{
                     fill: `url(#bgPattern${id})`
                 }} rx="15"/>)
             })}
         </svg>
-        <Toolbar counter={counter} length={positions[0].length} animate={speed} medicineName={medicineName} consumeMove={consumeMove} setAnimate={setSpeed}/>
+        <Toolbar counter={counter} length={positions[0].length} animate={speed} medicineName={medicineName}
+                 consumeMove={consumeMove} setAnimate={setSpeed}/>
     </>)
 
 }

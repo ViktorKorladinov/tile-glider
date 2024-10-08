@@ -14,6 +14,7 @@ function Toolbar({counter, length, animate, setAnimate, consumeMove, medicineNam
     const ganttNamesArray = ganttData['names'].map(x => './gantts/' + x)
 
     useEffect(() => {
+        // noinspection JSValidateTypes
         contentWindowRef.current = contentWindow
     }, [contentWindow])
 
@@ -40,7 +41,7 @@ function Toolbar({counter, length, animate, setAnimate, consumeMove, medicineNam
             const move = async (count) => iframeItem.moveBarTo(count, animate * 50)
             move(counter).catch(err => console.log(err))
         }
-    }, [counter])
+    }, [animate, counter, iframeItem])
 
     const handleGrid = () => {
         const iframeItem = gridIframe.current.contentWindow
