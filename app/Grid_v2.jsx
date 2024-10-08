@@ -1,5 +1,5 @@
 'use client'
-import {useState, useEffect, useRef} from "react"
+import {useState, useEffect, useRef, cloneElement} from "react"
 import {animated, useSprings} from '@react-spring/web'
 import './grid.css'
 import Tile from "./Tile"
@@ -19,6 +19,7 @@ export default function Grid_v2({m, n, positions}) {
     const [down, setDown] = useState([]);
     const [left, setLeft] = useState([]);
     const [right, setRight] = useState([]);
+    const [medicineName, setMedicine] = useState([]);
 
     // Use useRef for mutable variables that we want to persist
     // without triggering a re-render on their change
@@ -54,7 +55,7 @@ export default function Grid_v2({m, n, positions}) {
     }, []);
 
     const consumeMove = () => {
-        if (positions && positions.length > 0 && progressRef.current !== positions[0].length) {
+        if (positions && positions.length > 0 && progressRef.current !== positions[0].length-1) {
             let newCoords = []
             for (const path of positions) {
                 const nextStep = path[progressRef.current+1];
@@ -88,15 +89,15 @@ export default function Grid_v2({m, n, positions}) {
         const upC = []
         const downC = []
         for (let index = 0; index < n; index++) {
-            upC.push(<Tile speed={speed} key={`upperH${index}`} name={dispenserInfo[`${index}x0`]} k={`upperH${index}`}
+            upC.push(<Tile setMedicine={setMedicine} speed={speed} key={`upperH${index}`} name={dispenserInfo[`${index}x0`]} k={`upperH${index}`}
                            w={CELL_SIZE} x={index * CELL_SIZE}/>)
-            downC.push(<Tile speed={speed} key={`lowerH${index}`} name={dispenserInfo[`${index}x${m - 1}`]}
+            downC.push(<Tile setMedicine={setMedicine} speed={speed} key={`lowerH${index}`} name={dispenserInfo[`${index}x${m - 1}`]}
                              k={`lowerH${index}`} w={CELL_SIZE} x={index * CELL_SIZE} y={(m - 1) * CELL_SIZE}/>)
         }
         for (let index = 1; index < m - 1; index++) {
-            leftC.push(<Tile speed={speed} key={`leftV${index}`} name={dispenserInfo[`0x${index}`]} k={`leftV${index}`}
+            leftC.push(<Tile setMedicine={setMedicine} speed={speed} key={`leftV${index}`} name={dispenserInfo[`0x${index}`]} k={`leftV${index}`}
                              w={CELL_SIZE} y={index * CELL_SIZE}/>)
-            rightC.push(<Tile speed={speed} key={`rightV${index}`} name={dispenserInfo[`${n - 1}x${index}`]}
+            rightC.push(<Tile setMedicine={setMedicine} speed={speed} key={`rightV${index}`} name={dispenserInfo[`${n - 1}x${index}`]}
                               k={`rightV${index}`} w={CELL_SIZE} x={(n - 1) * CELL_SIZE} y={index * CELL_SIZE}/>)
         }
         setUp(upC)
@@ -118,9 +119,9 @@ export default function Grid_v2({m, n, positions}) {
         let newDown = down
         const horizontalTiles = (val, idx, x) => {
             if (idx === x) {
-                const temp = val.props.idx ? val.props.idx : 0
-                return <Tile speed={val.props.speed} key={val.props.k} k={val.props.k} name={val.props.name}
-                             w={val.props.w} x={val.props.x} y={val.props.y} idx={temp + 1}/>
+                return cloneElement(val, {
+                    idx: val.props.idx ? val.props.idx + 1 : 1,
+                });
             }
             return val
         }
@@ -173,7 +174,7 @@ export default function Grid_v2({m, n, positions}) {
                 }} rx="15"/>)
             })}
         </svg>
-        <Toolbar counter={counter} length={positions[0].length} animate={speed} consumeMove={consumeMove} setAnimate={setSpeed}/>
+        <Toolbar counter={counter} length={positions[0].length} animate={speed} medicineName={medicineName} consumeMove={consumeMove} setAnimate={setSpeed}/>
     </>)
 
 }
