@@ -67,11 +67,6 @@ iframe {
     fill: lightgray;
 }
 
-.tile:hover > text{
-    fill: #908f8f;
-    cursor: default;
-}
-
 .interface{
     fill: lightblue
 }

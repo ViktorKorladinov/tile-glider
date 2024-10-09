@@ -1,4 +1,4 @@
-// noinspection JSValidateTypes
+// noinspection JSValidateTypes,JSIncompatibleTypesComparison
 
 'use client'
 import {useState, useEffect, useRef, useCallback} from "react"
@@ -6,6 +6,7 @@ import {animated, useSprings} from '@react-spring/web'
 import './grid.css'
 import Tile from "./Tile"
 import dispenserInfo from '../dispensers.json'
+import medicineInfo from '../medicines.json'
 import patientColors from '../patient_color_dict.json'
 import Toolbar from "@/app/Toolbar";
 
@@ -15,25 +16,47 @@ const CELL_SIZE = 240;
 export default function Grid_v2({m, n, positions}) {
     const [counter, setCounter] = useState(1)
     const [speed, setSpeed] = useState(0)
-    const statePosC = positions.map(arr => ({x: arr[0].x * CELL_SIZE, y: arr[0].y * CELL_SIZE}));
-    const moversRefs = useRef(statePosC)
     const [matrix, setMatrix] = useState(() => {
-        return Array.from({length: m}, () => Array(m).fill(0));
+        return Array.from({length: m}, () => Array(n).fill(0));
     });
-    const [medicineName, setMedicine] = useState([]);
+    const [selected, setSelected] = useState(() => {
+        return Array.from({length: m}, () => Array(n).fill(0));
+    });
+    const [medicineName, setMedicine] = useState("");
+
+    const statePosC = positions.map(arr => ({x: arr[0].x * CELL_SIZE, y: arr[0].y * CELL_SIZE}));
     const [srpingVals, api] = useSprings(positions.length, idx => ({
         from: statePosC[idx],
     }))
-    // Use useRef for mutable variables that we want to persist
-    // without triggering a re-render on their change
+
+    const moversRefs = useRef(statePosC);
     const requestRef = useRef();
     const previousTimeRef = useRef();
     const animateRef = useRef(0);
     const progressRef = useRef(1);
+    const medicineRef = useRef('');
 
+    // react to animation speed change
     useEffect(() => {
         animateRef.current = speed
     }, [speed]);
+
+    // react to medicine selection
+    useEffect(() => {
+        if (medicineName === medicineRef.current) return
+        let updatedSelected = Array.from({length: m}, () => Array(n).fill(0))
+        if (medicineName.length > 0) {
+            for (let coordinate of medicineInfo[medicineName]) {
+                const x = coordinate[0]
+                const y = coordinate[1]
+                updatedSelected[x][y] = 1;
+            }
+            medicineRef.current = medicineName
+        } else {
+            medicineRef.current = ''
+        }
+        setSelected(updatedSelected);
+    }, [matrix, m, medicineName, n, selected])
 
     const consumeMove = useCallback(() => {
         if (positions && positions.length > 0 && progressRef.current !== positions[0].length - 1) {
@@ -71,7 +94,7 @@ export default function Grid_v2({m, n, positions}) {
             }
             setMatrix(updatedMatrix);
         }
-    },[api, matrix, n, positions])
+    }, [api, matrix, n, positions])
 
     const animateV = useCallback(time => {
         if (previousTimeRef.current !== undefined) {
@@ -83,14 +106,28 @@ export default function Grid_v2({m, n, positions}) {
         } else {
             previousTimeRef.current = time;
         }
-        if (progressRef.current !== positions[0].length)
-            requestRef.current = requestAnimationFrame(animateV);
-        else
-            progressRef.current -= 1
-    },[consumeMove, positions])
+        if (progressRef.current !== positions[0].length) requestRef.current = requestAnimationFrame(animateV); else progressRef.current -= 1
+    }, [consumeMove, positions])
 
     useEffect(() => {
-        window.abc = () => {
+        window.abc = (val) => {
+            const name = val['points'][0]['data']['offsetgroup']
+            if (name in medicineInfo) {
+                setMedicine(name)
+            }
+        }
+        window.reset = () => {
+            setMedicine("")
+        }
+        window.legend = (data) => {
+            setMedicine(medicine => {
+                const newMed = data['data'][data['curveNumber']]['legendgroup']
+                if (medicine === newMed) {
+                    return ""
+                } else {
+                    return newMed
+                }
+            });
         }
         requestRef.current = requestAnimationFrame(animateV);
         return () => cancelAnimationFrame(requestRef.current);
@@ -102,9 +139,9 @@ export default function Grid_v2({m, n, positions}) {
         for (let i = 0; i < m; i++) {
             for (let j = 0; j < n; j++) {
                 if (i === 0 || j === 0 || i === m - 1 || j === n - 1) {
-                    res.push(<Tile setMedicine={setMedicine} speed={speed} key={`${i}x${j}`}
+                    res.push(<Tile setMedicine={setMedicine} selected={selected[i][j]} speed={speed} key={`${i}x${j}`}
                                    name={dispenserInfo[`${i}x${j}`]}
-                                   w={CELL_SIZE} x={i*CELL_SIZE} y={j * CELL_SIZE} idx={matrix[i][j]}/>)
+                                   w={CELL_SIZE} x={i * CELL_SIZE} y={j * CELL_SIZE} idx={matrix[i][j]}/>)
                 }
             }
         }
@@ -132,13 +169,14 @@ export default function Grid_v2({m, n, positions}) {
                 {placeTiles()}
             </g>
             {srpingVals.map((spring, id) => {
-                return (<animated.rect key={`mover${id}`} x={spring['x']} y={spring['y']} width="112" height="112" style={{
-                    fill: `url(#bgPattern${id})`
-                }} rx="15"/>)
+                return (
+                    <animated.rect key={`mover${id}`} x={spring['x']} y={spring['y']} width="112" height="112" style={{
+                        fill: `url(#bgPattern${id})`
+                    }} rx="15"/>)
             })}
         </svg>
         <Toolbar counter={counter} length={positions[0].length} animate={speed} medicineName={medicineName}
-                 consumeMove={consumeMove} setAnimate={setSpeed}/>
+                 consumeMove={consumeMove} setAnimate={setSpeed} setMedicine={setMedicine}/>
     </>)
 
 }

@@ -1,10 +1,13 @@
 import React, {memo, useEffect, useRef, useState} from 'react'
 import {getColorFromGradient} from './utilities';
 
- const Tile = memo(function NonMemoTile({w, h = w, x = 0, y = 0, idx = 0, setMedicine,name='Interface', speed = 500}){
+const Tile = memo(function NonMemoTile({w, h = w, x, y, idx, selected, setMedicine, name = 'Interface', speed}) {
     let color = getColorFromGradient(idx)
     let tileType = "tile"
-    if (name === 'Interface') {
+    if (selected === 1) {
+        color = 'lightgreen'
+        tileType += 'selected'
+    } else if (name === 'Interface') {
         tileType += " interface"
         color = 'lightblue'
     }
@@ -17,18 +20,19 @@ import {getColorFromGradient} from './utilities';
         const textElement = textRef.current;
         const textBBox = textElement.getBBox();
         const textWidth = textBBox.width;
-        setStateX(x+w/2-textWidth/2)
+        setStateX(x + w / 2 - textWidth / 2)
         setStateY(y + h / 2 + 40)
     }, [h, y, idx, x, w]);
-    console.log(`Rerender of ${name}`)
-    return (
-        <g  className={tileType} onMouseEnter={()=>{setMedicine(name)}} onMouseLeave={()=>{setMedicine("")}}>
-            <rect y={y} x={x} width={w} height={h} fill={color}
-                  style={{transition: trans, msTransition: trans, WebkitTransition: trans}}/>
-            <text ref={textRef} y={stateY} x={stateX} width={w} height={h} fontFamily="Verdana" fontSize="120"
-                  fill='black'>{idx}</text>
-        </g>
-    )
+    return (<g className={tileType} onMouseEnter={() => {
+        setMedicine(name)
+    }} onMouseLeave={() => {
+        setMedicine("")
+    }}>
+        <rect y={y} x={x} width={w} height={h} fill={color}
+              style={{transition: trans, msTransition: trans, WebkitTransition: trans}}/>
+        <text ref={textRef} y={stateY} x={stateX} width={w} height={h} fontFamily="Verdana" fontSize="120"
+              fill='black'>{idx}</text>
+    </g>)
 })
 
 export default Tile

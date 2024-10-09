@@ -31,8 +31,14 @@
             'line': {'color': 'red', 'width': 1}, name: 'Current Tick'
         });
     }
+    plotlyPlot.on('plotly_legenddoubleclick', function(data){
+        window.parent.legend(data)
+    });
     plotlyPlot.on('plotly_hover', function (data) {
         window.parent.abc(data)
+    })
+    plotlyPlot.on('plotly_unhover', function (data) {
+        window.parent.reset()
     })
 </script>
 </html>
