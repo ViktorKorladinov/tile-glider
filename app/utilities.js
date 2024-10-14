@@ -10,7 +10,7 @@ export function getColorFromGradientRGB(index, length) {
 }
 
 export function getColorFromGradient(index) {
-    length = pathInfo['max_path']
+    let length = pathInfo['max_path']
     const normalizedIndex = 1 - index / (length - 1) * 0.5;
     const color =  `hsl(${normalizedIndex * 20}, 100%, ${normalizedIndex*100}%)`
     return color;
