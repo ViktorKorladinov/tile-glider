@@ -11,6 +11,18 @@ main {
     max-height: 100%;
 }
 
+#logo{
+    position: absolute;
+    left: 15px;
+    top: 15px;
+    width: 100%;
+    min-height: 60px;
+}
+
+#aa{
+    width: max-content !important;
+}
+
 iframe {
     border: none;
     min-height: 300px;
@@ -64,7 +76,7 @@ iframe {
 
 .tile text{
     stroke: none;
-    fill: lightgray;
+    fill: #adadad;
 }
 
 .interface{
@@ -72,4 +84,7 @@ iframe {
 }
 .interface > text{
     fill: #4f4f4f;
+}
+.tileselected text{
+    stroke:none
 }

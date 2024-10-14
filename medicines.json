@@ -1,0 +1,292 @@
+{
+    "LISINOPRIL": [
+        [
+            0,
+            0
+        ],
+        [
+            0,
+            2
+        ],
+        [
+            0,
+            3
+        ],
+        [
+            0,
+            4
+        ]
+    ],
+    "SIMVASTATIN": [
+        [
+            0,
+            5
+        ],
+        [
+            0,
+            6
+        ],
+        [
+            0,
+            7
+        ]
+    ],
+    "METOPROLOL": [
+        [
+            0,
+            8
+        ],
+        [
+            0,
+            9
+        ],
+        [
+            0,
+            10
+        ]
+    ],
+    "METFORMIN": [
+        [
+            0,
+            11
+        ],
+        [
+            0,
+            12
+        ]
+    ],
+    "LEVOTHYROXINE": [
+        [
+            0,
+            13
+        ],
+        [
+            1,
+            13
+        ]
+    ],
+    "AMLODIPINE": [
+        [
+            2,
+            13
+        ],
+        [
+            3,
+            13
+        ]
+    ],
+    "HYDROCHLOROTHIAZIDE": [
+        [
+            4,
+            13
+        ]
+    ],
+    "FUROSEMIDE": [
+        [
+            6,
+            13
+        ]
+    ],
+    "ATORVASTATIN": [
+        [
+            7,
+            13
+        ]
+    ],
+    "OMEPRAZOLE": [
+        [
+            8,
+            13
+        ]
+    ],
+    "ATENOLOL": [
+        [
+            9,
+            13
+        ]
+    ],
+    "GLIPIZIDE": [
+        [
+            10,
+            13
+        ]
+    ],
+    "ALBUTEROL": [
+        [
+            11,
+            13
+        ]
+    ],
+    "WARFARIN": [
+        [
+            12,
+            13
+        ]
+    ],
+    "ASPIRIN": [
+        [
+            13,
+            13
+        ]
+    ],
+    "POTASSIUM CHLORIDE": [
+        [
+            13,
+            12
+        ]
+    ],
+    "ESOMEPRAZOLE": [
+        [
+            13,
+            11
+        ]
+    ],
+    "CLOPIDOGREL": [
+        [
+            13,
+            10
+        ]
+    ],
+    "CARVEDILOL": [
+        [
+            13,
+            9
+        ]
+    ],
+    "VALSARTAN": [
+        [
+            13,
+            8
+        ]
+    ],
+    "LOSARTAN": [
+        [
+            13,
+            7
+        ]
+    ],
+    "GABAPENTIN": [
+        [
+            13,
+            6
+        ]
+    ],
+    "ROSUVASTATIN": [
+        [
+            13,
+            5
+        ]
+    ],
+    "LOVASTATIN": [
+        [
+            13,
+            4
+        ]
+    ],
+    "PIOGLITAZONE": [
+        [
+            13,
+            3
+        ]
+    ],
+    "PRAVASTATIN": [
+        [
+            13,
+            2
+        ]
+    ],
+    "RANITIDINE": [
+        [
+            13,
+            1
+        ]
+    ],
+    "TRAMADOL": [
+        [
+            13,
+            0
+        ]
+    ],
+    "IBUPROFEN": [
+        [
+            12,
+            0
+        ]
+    ],
+    "INSULIN GLARGINE": [
+        [
+            11,
+            0
+        ]
+    ],
+    "CITALOPRAM": [
+        [
+            10,
+            0
+        ]
+    ],
+    "ALENDRONATE": [
+        [
+            9,
+            0
+        ]
+    ],
+    "ALLOPURINOL": [
+        [
+            8,
+            0
+        ]
+    ],
+    "MONTELUKAST": [
+        [
+            7,
+            0
+        ]
+    ],
+    "FEXOFENADINE": [
+        [
+            6,
+            0
+        ]
+    ],
+    "TAMSULOSIN": [
+        [
+            5,
+            0
+        ]
+    ],
+    "ZOLPIDEM": [
+        [
+            4,
+            0
+        ]
+    ],
+    "SERTRALINE": [
+        [
+            3,
+            0
+        ]
+    ],
+    "FLUTICASONE NASAL": [
+        [
+            2,
+            0
+        ]
+    ],
+    "PREDNISONE": [
+        [
+            1,
+            0
+        ]
+    ],
+    "Interface": [
+        [
+            0,
+            1
+        ],
+        [
+            5,
+            13
+        ]
+    ]
+}

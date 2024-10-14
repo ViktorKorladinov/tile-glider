@@ -3,6 +3,7 @@ import {useEffect, useState} from "react"
 import './grid.css'
 import testData from '../test.json'
 import Grid_v2 from "./Grid_v2";
+import Image from "next/image";
 
 export default function Home() {
     const [seq, setSeq] = useState();
@@ -40,6 +41,9 @@ export default function Home() {
     }
     return (
         <main>
+            <div id="logo">
+                <Image id="aa" fill={true} alt="CIIRC Logo" src={"./ciirc.svg"}/>
+            </div>
             <section className="gridHolder">
                 <Grid_v2 n={size.n} m={size.m} positions={seq}/>
             </section>

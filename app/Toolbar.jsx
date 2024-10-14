@@ -38,8 +38,8 @@ function Toolbar({counter, length, animate, setAnimate, consumeMove, medicineNam
 
     useEffect(() => {
         if (counter % 50 === 0) {
-            const move = async (count) => iframeItem.moveBarTo(count, animate * 50)
-            move(counter).catch(err => console.log(err))
+            // const move = async (count) => iframeItem.moveBarTo(count, animate * 50)
+            // move(counter).catch(err => console.log(err))
         }
     }, [animate, counter, iframeItem])
 
