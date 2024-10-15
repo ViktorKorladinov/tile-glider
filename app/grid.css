@@ -15,8 +15,31 @@ main {
     position: absolute;
     left: 15px;
     top: 15px;
-    width: 100%;
-    min-height: 60px;
+    width: auto;
+    height: 60px;
+}
+
+@media screen and (max-width: 800px) and  (orientation: portrait) {
+    #logo{
+        position: static;
+        width: 200px;
+        height: 100px;
+    }
+
+    #logo >img{
+        position: relative !important;
+        width: 90% !important;
+        margin-left: 10px;
+    }
+
+    .barDetached{
+        position: static !important;
+        margin-top: 40px;
+    }
+
+    .gridHolder{
+        height: max-content !important;
+    }
 }
 
 #aa{
