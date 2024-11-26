@@ -8,7 +8,7 @@ import Tile from "./Tile"
 import dispenserInfo from '../../dispensers.json'
 import medicineInfo from '../../medicines.json'
 import patientColors from '../../patient_color_dict.json'
-import Toolbar from "@/app/simulator/Toolbar";
+import Toolbar from "./Toolbar";
 
 
 const CELL_SIZE = 240;

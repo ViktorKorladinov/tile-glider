@@ -11,7 +11,7 @@ export default function Home() {
       <ul>
         {jsonFiles.map(file => (
           <li key={file}>
-            <a href={`/simulator/${path.parse(file).name}`}>{file}</a>
+            <a href={`/${path.parse(file).name}/simulator`}>{file}</a>
           </li>
         ))}
       </ul>
