@@ -1,60 +1,20 @@
-'use client'
-import {useState} from "react"
-import './grid.css'
-// import testData from '../test.json'
-import Grid_v2 from "./Grid_v2";
-import Image from "next/image";
+import fs from 'fs';
+import path from 'path';
 
 export default function Home() {
-    const [seq, setSeq] = useState();
-    const [size, setSize] = useState({n: 0, m: 0});
-    // const [testing, _] = useState(true);
+  const jsonFiles = fs.readdirSync('public')
+    .filter(file => path.extname(file) === '.json');
 
-    // function loadJSON() {
-    //     // already loaded
-    //     if (size.n !== 0) return
-    //     if (testing) {
-    //         parseJSON(testData)
-    //         return <></>
-    //     }
-    // }
-
-    const parseJSON = (data) => {
-        setSeq(data["paths"]);
-        setSize({n: data.n, m: data.m})
-    }
-
-    function handleChange(event) {
-        const file = event.target.files[0]
-        if (file['type'] === 'application/json') {
-            let reader = new FileReader();
-            reader.onload = (event) => {
-                parseJSON(JSON.parse(event.target.result.toString()))
-                // console.log(event.target.result.toString())
-            }
-            reader.readAsText(file);
-
-        }
-    }
-    console.log('ahoj')
-    import('../test.json').then(a=> console.log(a.paths)).catch(reason => console.log(reason))
-
-    if (!seq) {
-        return (
-            <main>
-                <input type="file" onChange={handleChange}/>
-            </main>
-        )
-    }
-    return (
-        <main>
-
-            <div id="logo">
-                <Image id="aa" fill={true} alt="CIIRC Logo" src={"./ciirc.svg"}/>
-            </div>
-            <section className="gridHolder">
-                <Grid_v2 n={size.n} m={size.m} positions={seq}/>
-            </section>
-        </main>
-    );
+  return (
+    <div>
+      <h1>Available JSON Files</h1>
+      <ul>
+        {jsonFiles.map(file => (
+          <li key={file}>
+            <a href={`/simulator/${path.parse(file).name}`}>{file}</a>
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
 }

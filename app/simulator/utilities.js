@@ -1,4 +1,4 @@
-import pathInfo from '../gantts.json'
+import pathInfo from '../../gantts.json'
 export function getColorFromGradientRGB(index, length) {
     // if (index==0) return `transparent`
     const normalizedIndex = 1 - index / (length - 1);

@@ -5,10 +5,10 @@ import {useState, useEffect, useRef, useCallback} from "react"
 import {animated, useSprings} from '@react-spring/web'
 import './grid.css'
 import Tile from "./Tile"
-import dispenserInfo from '../dispensers.json'
-import medicineInfo from '../medicines.json'
-import patientColors from '../patient_color_dict.json'
-import Toolbar from "@/app/Toolbar";
+import dispenserInfo from '../../dispensers.json'
+import medicineInfo from '../../medicines.json'
+import patientColors from '../../patient_color_dict.json'
+import Toolbar from "@/app/simulator/Toolbar";
 
 
 const CELL_SIZE = 240;
