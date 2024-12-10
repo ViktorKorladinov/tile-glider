@@ -5,15 +5,17 @@ import {useState, useEffect, useRef, useCallback} from "react"
 import {animated, useSprings} from '@react-spring/web'
 import './grid.css'
 import Tile from "./Tile"
-import dispenserInfo from '../../dispensers.json'
-import medicineInfo from '../../medicines.json'
-import patientColors from '../../patient_color_dict.json'
 import Toolbar from "./Toolbar";
 
 
 const CELL_SIZE = 240;
 // m x n
-export default function Grid_v2({m, n, positions}) {
+export default function Grid_v2({m, n, simulationData}) {
+    const medicineInfo = simulationData[2]
+    const dispenserInfo = simulationData[0]
+    const positions = simulationData[5]['paths']
+    const patientColors = simulationData[3]
+    const ganttData = simulationData[1]
     const [counter, setCounter] = useState(1)
     const [speed, setSpeed] = useState(0)
     const [matrix, setMatrix] = useState(() => {
@@ -56,7 +58,7 @@ export default function Grid_v2({m, n, positions}) {
             medicineRef.current = ''
         }
         setSelected(updatedSelected);
-    }, [matrix, m, medicineName, n, selected])
+    }, [medicineInfo, matrix, m, medicineName, n, selected])
 
     const consumeMove = useCallback(() => {
         if (positions && positions.length > 0 && progressRef.current !== positions[0].length - 1) {
@@ -131,7 +133,7 @@ export default function Grid_v2({m, n, positions}) {
         }
         requestRef.current = requestAnimationFrame(animateV);
         return () => cancelAnimationFrame(requestRef.current);
-    }, [animateV]);
+    }, [animateV, medicineInfo]);
 
 
     const placeTiles = () => {
@@ -139,7 +141,7 @@ export default function Grid_v2({m, n, positions}) {
         for (let i = 0; i < m; i++) {
             for (let j = 0; j < n; j++) {
                 if (i === 0 || j === 0 || i === m - 1 || j === n - 1) {
-                    res.push(<Tile setMedicine={setMedicine} selected={selected[i][j]} speed={speed} key={`${i}x${j}`}
+                    res.push(<Tile maxPath={ganttData['max_path']} setMedicine={setMedicine} selected={selected[i][j]} speed={speed} key={`${i}x${j}`}
                                    name={dispenserInfo[`${i}x${j}`]}
                                    w={CELL_SIZE} x={i * CELL_SIZE} y={j * CELL_SIZE} idx={matrix[i][j]}/>)
                 }
@@ -176,7 +178,7 @@ export default function Grid_v2({m, n, positions}) {
             })}
         </svg>
         <Toolbar counter={counter} length={positions[0].length} animate={speed} medicineName={medicineName}
-                 consumeMove={consumeMove} setAnimate={setSpeed} setMedicine={setMedicine}/>
+                 consumeMove={consumeMove} setAnimate={setSpeed} setMedicine={setMedicine} ganttData={ganttData} />
     </>)
 
 }

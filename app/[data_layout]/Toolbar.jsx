@@ -1,9 +1,8 @@
 'use client'
 import React, {useEffect, useRef, useState} from 'react';
-import ganttData from "@/gantts.json";
 import './toolbar.css'
 
-function Toolbar({counter, length, animate, setAnimate, consumeMove, medicineName}) {
+function Toolbar({counter, length, animate, setAnimate, consumeMove, medicineName, ganttData}) {
     const [selectedGantt, setSelectedGantt] = useState(0)
     const [btnStates, setStates] = useState(["", "", "", "", ""])
     const [barMode, setBarMode] = useState('barAttached')

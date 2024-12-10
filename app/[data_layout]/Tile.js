@@ -1,8 +1,19 @@
 import React, {memo, useEffect, useRef, useState} from 'react'
 import {getColorFromGradient} from './utilities';
 
-const Tile = memo(function NonMemoTile({w, h = w, x, y, idx, selected, setMedicine, name = 'Interface', speed}) {
-    let color = getColorFromGradient(idx)
+const Tile = memo(function NonMemoTile({
+                                           w,
+                                           h = w,
+                                           x,
+                                           y,
+                                           idx,
+                                           selected,
+                                           maxPath,
+                                           setMedicine,
+                                           name = 'Interface',
+                                           speed
+                                       }) {
+    let color = getColorFromGradient(idx, maxPath)
     let tileType = "tile"
     if (selected === 1) {
         color = 'lightgreen'
