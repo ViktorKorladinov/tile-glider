@@ -48,11 +48,13 @@ export default function Grid_v2({m, n, simulationData}) {
         if (medicineName === medicineRef.current) return
         let updatedSelected = Array.from({length: m}, () => Array(n).fill(0))
         if (medicineName.length > 0) {
-            for (let coordinate of medicineInfo[medicineName]) {
-                const x = coordinate[0]
-                const y = coordinate[1]
-                updatedSelected[x][y] = 1;
-            }
+           for (const singleMedicineName of medicineName.split(',')) {
+               for (let coordinate of medicineInfo[singleMedicineName]) {
+                   const x = coordinate[0]
+                   const y = coordinate[1]
+                   updatedSelected[x][y] = 1;
+               }
+           }
             medicineRef.current = medicineName
         } else {
             medicineRef.current = ''
@@ -172,7 +174,7 @@ export default function Grid_v2({m, n, simulationData}) {
             </g>
             {srpingVals.map((spring, id) => {
                 return (
-                    <animated.rect key={`mover${id}`} x={spring['x']} y={spring['y']} width="112" height="112" style={{
+                    <animated.rect key={`mover${id}`} x={spring['x']} y={spring['y']} width="12" height="112" style={{
                         fill: `url(#bgPattern${id})`
                     }} rx="15"/>)
             })}

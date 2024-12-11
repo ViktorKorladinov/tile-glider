@@ -15,7 +15,7 @@ export default function Simulator() {
             const response = await fetch(`/api/loadJson?id=${params.data_layout}`);
             const jsonData = await response.json();
             setSimData(jsonData);
-            setSize({n: jsonData[5].n, m: jsonData[5].m});
+            setSize({n: jsonData[5].m, m: jsonData[5].n});
         };
         void fetchData();
     }, [params.data_layout]);
