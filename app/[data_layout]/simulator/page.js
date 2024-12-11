@@ -32,7 +32,7 @@ export default function Simulator() {
         <main>
 
             <div id="logo">
-                <Image id="aa" fill={true} alt="CIIRC Logo" src={"./ciirc.svg"} />
+                <Image id="aa" fill={true} alt="CIIRC Logo" src={"../ciirc.svg"} />
             </div>
             <section className="gridHolder">
                 <Grid_v2 n={size.n} m={size.m} simulationData={simulationData} />

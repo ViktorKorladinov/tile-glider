@@ -3,7 +3,6 @@
 'use client'
 import {useState, useEffect, useRef, useCallback} from "react"
 import {animated, useSprings} from '@react-spring/web'
-import './grid.css'
 import Tile from "./Tile"
 import Toolbar from "./Toolbar";
 
@@ -52,7 +51,7 @@ export default function Grid_v2({m, n, simulationData}) {
                for (let coordinate of medicineInfo[singleMedicineName]) {
                    const x = coordinate[0]
                    const y = coordinate[1]
-                   updatedSelected[x][y] = 1;
+                   updatedSelected[x][y] = 1
                }
            }
             medicineRef.current = medicineName
@@ -153,7 +152,7 @@ export default function Grid_v2({m, n, simulationData}) {
     }
 
     return (<>
-        <svg viewBox={`-5 -5 ${n * CELL_SIZE + 10} ${m * CELL_SIZE + 10}`}
+        <svg viewBox={`-5 -5 ${m * CELL_SIZE + 10} ${n * CELL_SIZE + 10}`}
              xmlns="http://www.w3.org/2000/svg">
             <defs>
                 {srpingVals.map((spring, id) => (
@@ -174,7 +173,7 @@ export default function Grid_v2({m, n, simulationData}) {
             </g>
             {srpingVals.map((spring, id) => {
                 return (
-                    <animated.rect key={`mover${id}`} x={spring['x']} y={spring['y']} width="12" height="112" style={{
+                    <animated.rect key={`mover${id}`} x={spring['x']} y={spring['y']} width="112" height="112" style={{
                         fill: `url(#bgPattern${id})`
                     }} rx="15"/>)
             })}

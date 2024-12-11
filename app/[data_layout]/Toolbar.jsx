@@ -10,7 +10,7 @@ function Toolbar({counter, length, animate, setAnimate, consumeMove, medicineNam
     const [contentWindow, setContentWindow] = useState(null)
     const contentWindowRef = useRef();
 
-    const ganttNamesArray = ganttData['names'].map(x => './gantts/' + x)
+    const ganttNamesArray = ganttData['names'].map(x => '/gantts/' + x)
 
     useEffect(() => {
         // noinspection JSValidateTypes
@@ -36,11 +36,13 @@ function Toolbar({counter, length, animate, setAnimate, consumeMove, medicineNam
     let iframeItem = gridIframe.current ? gridIframe.current.contentWindow : null
 
     useEffect(() => {
-        if (counter % 50 === 0) {
-            // const move = async (count) => iframeItem.moveBarTo(count, animate * 50)
-            // move(counter).catch(err => console.log(err))
-        }
-    }, [animate, counter, iframeItem])
+        if(iframeItem == null) return
+       iframeItem.postMessage({
+                type: 'UPDATE_MARKER',
+                position: counter
+            }, '*');
+        console.log('sent')
+    }, [ animate, counter, iframeItem])
 
     const handleGrid = () => {
         const iframeItem = gridIframe.current.contentWindow
@@ -49,14 +51,15 @@ function Toolbar({counter, length, animate, setAnimate, consumeMove, medicineNam
     }
 
     const showMedicine = () => {
-        if (medicineName.length !==0)
+        if (medicineName.length !== 0)
             return <div className="medicine">{medicineName}</div>
     }
+
     return (<div className={barMode}>
         <div className="toolbarWrapper">
             {showMedicine()}
             <div className="toolbar">
-                <span>Frame: {counter}/{length-1} </span>
+                <span>Frame: {counter}/{length - 1} </span>
                 {counter !== length ? <>
                     <button className={btnStates[0]} onClick={() => select(0, -2)}>Next Frame</button>
                     <button className={btnStates[1] + " separate"} onClick={() => select(1, 250)}>
@@ -84,7 +87,8 @@ function Toolbar({counter, length, animate, setAnimate, consumeMove, medicineNam
                 </> : ""}
             </div>
         </div>
-        <iframe ref={gridIframe} onLoad={handleGrid} src={ganttNamesArray[selectedGantt]} title="Gantt"/>
+        <iframe ref={gridIframe} onLoad={handleGrid}
+                src={"../simulations/" + ganttData['folder'] + ganttNamesArray[selectedGantt]} title="Gantt"/>
     </div>);
 }
 
