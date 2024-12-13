@@ -7,7 +7,7 @@ import { useParams } from 'next/navigation'
 
 export default function Simulator() {
     const [simulationData, setSimData] = useState();
-    const [size, setSize] = useState({ n: 0, m: 0 });
+    const [size, setSize] = useState({ n: 0, m: 0, fill: false });
     const params = useParams()
 
     useEffect(() => {
@@ -15,7 +15,7 @@ export default function Simulator() {
             const response = await fetch(`/api/loadJson?id=${params.data_layout}`);
             const jsonData = await response.json();
             setSimData(jsonData);
-            setSize({n: jsonData[5].m, m: jsonData[5].n});
+            setSize({n: jsonData[5].m, m: jsonData[5].n, fill: jsonData[5]['filled']});
         };
         void fetchData();
     }, [params.data_layout]);
@@ -35,7 +35,7 @@ export default function Simulator() {
                 <Image id="aa" fill={true} alt="CIIRC Logo" src={"../ciirc.svg"} />
             </div>
             <section className="gridHolder">
-                <Grid_v2 n={size.n} m={size.m} simulationData={simulationData} />
+                <Grid_v2 n={size.n} m={size.m} fill={size.fill} simulationData={simulationData} />
             </section>
         </main>
     );

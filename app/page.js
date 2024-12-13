@@ -13,8 +13,9 @@ export default function Home() {
 
         try {
             const resultsData = JSON.parse(fs.readFileSync(resultsFilePath, 'utf8'));
-            const {dose, movers, patients} = resultsData.config;
-            return {dose, movers, patients};
+            const {dose, movers, patients} = resultsData.config
+            const topology = resultsData.config.topology_info.topology
+            return {dose, movers, patients, topology};
         } catch (error) {
             console.error(`Error reading results.json for ${simulationFolder}:`, error);
             return null;
@@ -45,7 +46,7 @@ export default function Home() {
                 {simulationsData.map((file, id) => (
                     <li key={`simulation-${id}`}>
                         <a href={`/${id}/simulator`}>
-                            {`Simulation with dose ${file.dose}, ${file.movers} movers and ${file.patients} patients`}
+                            {`Simulation [${file.topology}] with dose ${file.dose}, ${file.movers} movers and ${file.patients} patients`}
                         </a>
                     </li>
                 ))}

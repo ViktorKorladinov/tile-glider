@@ -9,7 +9,7 @@ import Toolbar from "./Toolbar";
 
 const CELL_SIZE = 240;
 // m x n
-export default function Grid_v2({m, n, simulationData}) {
+export default function Grid_v2({m, n, simulationData, fill}) {
     const medicineInfo = simulationData[2]
     const dispenserInfo = simulationData[0]
     const positions = simulationData[5]['paths']
@@ -141,7 +141,7 @@ export default function Grid_v2({m, n, simulationData}) {
         let res = []
         for (let i = 0; i < m; i++) {
             for (let j = 0; j < n; j++) {
-                if (i === 0 || j === 0 || i === m - 1 || j === n - 1) {
+                if (fill || i === 0 || j === 0 || i === m - 1 || j === n - 1) {
                     res.push(<Tile maxPath={ganttData['max_path']} setMedicine={setMedicine} selected={selected[i][j]} speed={speed} key={`${i}x${j}`}
                                    name={dispenserInfo[`${i}x${j}`]}
                                    w={CELL_SIZE} x={i * CELL_SIZE} y={j * CELL_SIZE} idx={matrix[i][j]}/>)
