@@ -45,6 +45,7 @@
 
 .barAttached .medicine{
     width: 200px;
+    font-size: small;
 }
 
 .toolbar, .medicine {

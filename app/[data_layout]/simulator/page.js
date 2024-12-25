@@ -15,7 +15,8 @@ export default function Simulator() {
             const response = await fetch(`/api/loadJson?id=${params.data_layout}`);
             const jsonData = await response.json();
             setSimData(jsonData);
-            setSize({n: jsonData[5].m, m: jsonData[5].n, fill: jsonData[5]['filled']});
+            let moverPaths = jsonData['mover_paths'];
+            setSize({n: moverPaths.m, m: moverPaths.n, fill: moverPaths['filled']});
         };
         void fetchData();
     }, [params.data_layout]);

@@ -10,11 +10,11 @@ import Toolbar from "./Toolbar";
 const CELL_SIZE = 240;
 // m x n
 export default function Grid_v2({m, n, simulationData, fill}) {
-    const medicineInfo = simulationData[2]
-    const dispenserInfo = simulationData[0]
-    const positions = simulationData[5]['paths']
-    const patientColors = simulationData[3]
-    const ganttData = simulationData[1]
+    const medicineInfo = simulationData['medicine']
+    const dispenserInfo = simulationData['dispensers']
+    const positions = simulationData['mover_paths']['paths']
+    const patientColors = simulationData['patient_color_dict']
+    const ganttData = simulationData['gantts']
     const [counter, setCounter] = useState(1)
     const [speed, setSpeed] = useState(0)
     const [matrix, setMatrix] = useState(() => {

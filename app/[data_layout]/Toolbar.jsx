@@ -51,8 +51,9 @@ function Toolbar({counter, length, animate, setAnimate, consumeMove, medicineNam
     }
 
     const showMedicine = () => {
+        let splitMedicineName = medicineName.split(',').join(', ')
         if (medicineName.length !== 0)
-            return <div className="medicine">{medicineName}</div>
+            return <div className="medicine">{splitMedicineName}</div>
     }
 
     return (<div className={barMode}>

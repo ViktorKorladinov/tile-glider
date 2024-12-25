@@ -31,7 +31,7 @@ export default function Home() {
     }
 
 
-    const directories = getDirectories('public/simulations');
+    const directories = getDirectories('public/simulations').sort((a, b) => a.name.localeCompare(b.name));
 
     const simulationsData = directories.map(dir => {
         const folderPath = path.join('public/simulations', dir);
