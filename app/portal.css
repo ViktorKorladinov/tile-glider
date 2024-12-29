@@ -1,0 +1,86 @@
+.simulations-container {
+    justify-content: center;
+}
+
+.card-container{
+    display: grid;
+    grid-template-columns: repeat(auto-fit, 300px); /* 300px matches card width */
+    gap: 20px;
+    justify-content: center;
+    padding: 20px;
+    width: 100%;
+}
+
+.card {
+    width: 300px;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: box-shadow 0.2s;
+    background: white;
+}
+
+.card:hover {
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+}
+
+.card-header {
+    background: #bed5ff;
+    padding: 0.6rem;
+    color: #2b2b2b;
+}
+
+.card-title {
+    margin: 0;
+    font-size: 1.25rem;
+    font-weight: 500;
+}
+
+.card-title::first-letter {
+    text-transform: capitalize;
+}
+
+.card-content {
+    padding: 1rem;
+}
+
+.grid-container {
+    display: grid;
+    grid-template-columns: repeat(8, 1fr);
+    gap: 4px;
+    margin-bottom: 1rem;
+}
+
+.grid-cell {
+    aspect-ratio: 1;
+    background-color: #f3f4f6;
+    border: 1px solid #e5e7eb;
+    border-radius: 4px;
+}
+
+.stats-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.stat-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: #374151;
+    margin-bottom: 0.75rem;
+}
+
+.stat-item:last-child {
+    margin-bottom: 0;
+}
+
+.stat-icon {
+    width: 20px;
+    height: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
