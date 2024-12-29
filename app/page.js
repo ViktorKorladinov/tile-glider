@@ -1,56 +1,27 @@
-import fs from 'fs';
-import path from 'path';
+// 'use client'
+// import {useEffect, useState} from "react";
+
 
 export default function Home() {
-    function getDirectories(srcPath) {
-        return fs.readdirSync(srcPath).filter(file => {
-            return fs.statSync(path.join(srcPath, file)).isDirectory();
-        });
-    }
+    // const [parsedSimulations, setParsedSimulations] = useState([]);
+    //
+    // useEffect(() => {
+    //     const fetchData = async () => {
+    //         const response = await fetch(`/api/parseSimulations`);
+    //         const jsonData = await response.json();
+    //         setParsedSimulations(jsonData);
+    //     };
+    //     void fetchData();
+    // }, []);
 
-    function extractSimulationData(simulationFolder) {
-        const resultsFilePath = path.join(simulationFolder, 'results.json');
-
-        try {
-            const resultsData = JSON.parse(fs.readFileSync(resultsFilePath, 'utf8'));
-            const {dose, movers, patients} = resultsData.config
-            const topology = resultsData.config.topology_info.topology
-            return {dose, movers, patients, topology};
-        } catch (error) {
-            console.error(`Error reading results.json for ${simulationFolder}:`, error);
-            return null;
-        }
-    }
-
-    function processSimulationFolder(folderPath) {
-        const simulationData = extractSimulationData(folderPath);
-        if (simulationData) {
-            simulationData.folderPath = folderPath;
-        }
-        return simulationData
-    }
-
-
-    const directories = getDirectories('public/simulations').sort((a, b) => a.name.localeCompare(b.name));
-
-    const simulationsData = directories.map(dir => {
-        const folderPath = path.join('public/simulations', dir);
-        return processSimulationFolder(folderPath)
-    })
-    console.log({simulationsData})
-
-    return (
-        <div>
+    return (<div>
             <h1>Available Simulations</h1>
             <ul>
-                {simulationsData.map((file, id) => (
-                    <li key={`simulation-${id}`}>
+                {[].map((file, id) => (<li key={`simulation-${id}`}>
                         <a href={`/${id}/simulator`}>
                             {`Simulation [${file.topology}] with dose ${file.dose}, ${file.movers} movers and ${file.patients} patients`}
                         </a>
-                    </li>
-                ))}
+                    </li>))}
             </ul>
-        </div>
-    );
+        </div>);
 }
