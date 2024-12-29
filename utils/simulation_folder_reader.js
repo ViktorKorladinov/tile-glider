@@ -2,9 +2,11 @@ import path from "path";
 import fs from 'fs';
 
 function getDirectories(srcPath) {
-    return fs.readdirSync(srcPath).filter(file => {
+    const a = fs.readdirSync(srcPath).filter(file => {
         return fs.statSync(path.join(srcPath, file)).isDirectory();
     });
+    console.log(a.name);
+    return a
 }
 
 function extractSimulationData(simulationFolder) {
@@ -30,7 +32,7 @@ function processSimulationFolder(folderPath) {
 }
 
 export function parseSimulations(folderPath) {
-    const directories = getDirectories(folderPath).sort((a, b) => a.name.localeCompare(b.name));
+    const directories = getDirectories(folderPath).sort((a, b) => a.localeCompare(b));
     return directories.map(dir => {
         const folderPath = path.join('public/simulations', dir);
         return processSimulationFolder(folderPath)
