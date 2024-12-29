@@ -43,7 +43,7 @@ export default function Home() {
                     </div>
                 </div>)
         })
-    }, [parsedSimulations]);
+    }, [parsedSimulations, router]);
 
     return (<div className={'simulations-container'}>
         <h1>Available Simulations</h1>
