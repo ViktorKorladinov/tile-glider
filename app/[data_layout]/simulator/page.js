@@ -1,6 +1,6 @@
 'use client'
 import {useEffect, useState} from "react"
-import '../grid.css'
+import '../../../styles/grid.css'
 import Grid from "../../../components/Grid";
 import Image from "next/image";
 import { useParams } from 'next/navigation'

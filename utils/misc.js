@@ -1,7 +1,6 @@
 import fs from "fs";
 
 export function createIcons() {
-    // Shape drawing functions with gap support
     const shapes = {
         square: (x, y, size, gap = 4) => {
             // Adjust position to account for gaps
@@ -9,7 +8,7 @@ export function createIcons() {
             const adjustedY = y + (gap / 2);
             const adjustedSize = size - gap;
 
-            return `<rect x="${adjustedX}" y="${adjustedY}" width="${adjustedSize}" height="${adjustedSize}" fill="none" stroke="black" rx="5" stroke-width="2"/>`;
+            return `<rect x="${adjustedX}" y="${adjustedY}" width="${adjustedSize}" height="${adjustedSize}" fill="none" stroke="black" rx="5" stroke-width="3"/>`;
         }
     };
 
@@ -38,8 +37,8 @@ export function createIcons() {
     }
 
     // Generate SVGs with gaps
-    fs.writeFileSync('public/layouts/square.svg', createGrid(4, 4));
-    fs.writeFileSync('public/layouts/doubleline.svg', createGrid(8, 2, true, 50));
-    fs.writeFileSync('public/layouts/line.svg', createGrid(10, 1, true, 40));
-    fs.writeFileSync('public/layouts/ring.svg', createGrid(4, 4, false, 100));
+    fs.writeFileSync('public/layouts/square.svg', createGrid(4, 4,true,100,10));
+    fs.writeFileSync('public/layouts/doubleline.svg', createGrid(6, 2, true, 100,10));
+    fs.writeFileSync('public/layouts/line.svg', createGrid(10, 1, true, 100,10));
+    fs.writeFileSync('public/layouts/ring.svg', createGrid(4, 4, false, 100,10));
 }

@@ -1,6 +1,6 @@
 'use client'
 import {useCallback, useEffect, useState} from "react";
-import '@/app/portal.css'
+import '@/styles/portal.css'
 import SimulationCard from "@/components/SimulationCard";
 
 export default function Home() {
@@ -15,12 +15,14 @@ export default function Home() {
     }, []);
 
     const renderSimulations = useCallback(() => {
-        return parsedSimulations.map((file, id) =><SimulationCard file={file} key={`simCard${id}`} id={id} />)
+        return parsedSimulations.map((file, id) => <SimulationCard file={file} key={`simCard${id}`} id={id}/>)
     }, [parsedSimulations]);
 
     return (<div className={'simulations-container'}>
         <h1>Available Simulations</h1>
-        <div className={"card-container"}>{renderSimulations()}</div>
+        <div className={"simulations-filters"}>
 
+        </div>
+        <div className={"card-container"}>{renderSimulations()}</div>
     </div>);
 }
