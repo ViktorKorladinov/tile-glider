@@ -91,8 +91,7 @@ export default function Grid_v2({m, n, simulationData, fill}) {
             const updatedMatrix = [...matrix]; // Update heatmap
             for (const pos of newCoords) {
                 const {x, y, mode} = pos
-                if (mode === "loading"){
-                    console.log(mode, x,y,pos)
+                if (mode !== "transit"){
                     continue
                 }
                 updatedMatrix[x][y] += 1 ;
