@@ -16,6 +16,7 @@
 
 .card {
     width: 300px;
+    min-height: 350px;
     border-radius: 8px;
     overflow: hidden;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
@@ -53,6 +54,8 @@
 }
 
 .card-content img{
+    display: block;
+    position: relative !important;
     max-height: 200px;
     width: 100%;
 }

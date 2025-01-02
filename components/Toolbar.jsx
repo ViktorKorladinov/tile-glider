@@ -1,6 +1,6 @@
 'use client'
 import React, {useEffect, useRef, useState} from 'react';
-import './toolbar.css'
+import '../app/[data_layout]/toolbar.css'
 
 function Toolbar({counter, length, animate, setAnimate, consumeMove, medicineName, ganttData}) {
     const [selectedGantt, setSelectedGantt] = useState(0)

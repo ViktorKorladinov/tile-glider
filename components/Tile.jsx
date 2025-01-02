@@ -1,5 +1,5 @@
 import React, {memo, useEffect, useRef, useState} from 'react'
-import {getColorFromGradient} from './utilities';
+import {getColorFromGradient} from '@/utils/color_utilities';
 
 const Tile = memo(function NonMemoTile({
                                            w,

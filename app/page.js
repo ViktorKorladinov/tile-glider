@@ -1,12 +1,10 @@
 'use client'
 import {useCallback, useEffect, useState} from "react";
-import { useRouter } from 'next/navigation'
-import Image from "next/image";
 import '@/app/portal.css'
+import SimulationCard from "@/components/SimulationCard";
 
 export default function Home() {
     const [parsedSimulations, setParsedSimulations] = useState([]);
-    const router = useRouter()
     useEffect(() => {
         const fetchData = async () => {
             const response = await fetch(`/api/parseSimulations`);
@@ -17,33 +15,8 @@ export default function Home() {
     }, []);
 
     const renderSimulations = useCallback(() => {
-        return parsedSimulations.map((file, id) => {
-            return (
-                <div key={`simCard${id}`} onClick={()=>router.push(`/${id}/simulator`)} className="card">
-                    <div className="card-header">
-                        <h2 className="card-title">{file.topology} simulation</h2>
-                    </div>
-                    <div className="card-content">
-                        <img src={`layouts/${file.topology}.svg`} alt="Simulation Image" />
-
-                        <ul className="stats-list">
-                            <li className="stat-item">
-                                <span className="stat-icon">📊</span>
-                                <span>Dose: {file.dose}</span>
-                            </li>
-                            <li className="stat-item">
-                                <span className="stat-icon">👥</span>
-                                <span>Movers: {file.movers}</span>
-                            </li>
-                            <li className="stat-item">
-                                <span className="stat-icon">👤</span>
-                                <span>Patients: {file.patients}</span>
-                            </li>
-                        </ul>
-                    </div>
-                </div>)
-        })
-    }, [parsedSimulations, router]);
+        return parsedSimulations.map((file, id) =><SimulationCard file={file} key={`simCard${id}`} id={id} />)
+    }, [parsedSimulations]);
 
     return (<div className={'simulations-container'}>
         <h1>Available Simulations</h1>

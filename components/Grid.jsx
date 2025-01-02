@@ -9,7 +9,7 @@ import Toolbar from "./Toolbar";
 
 const CELL_SIZE = 240;
 // m x n
-export default function Grid_v2({m, n, simulationData, fill}) {
+export default function Grid({m, n, simulationData, fill}) {
     const medicineInfo = simulationData['medicine']
     const dispenserInfo = simulationData['dispensers']
     const positions = simulationData['mover_paths']['paths']
