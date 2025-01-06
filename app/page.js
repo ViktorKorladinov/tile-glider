@@ -29,6 +29,7 @@ export default function Home() {
   }, []);
 
   const renderSimulations = useCallback(() => {
+    // if (parsedSimulations.length === 0) return (<h2>No simulations to be shown</h2>);
     return parsedSimulations.filter(simulation =>
         patientRange.some(patientRange =>
             simulation.patients >= patientRange.start &&
@@ -42,7 +43,7 @@ export default function Home() {
                 simulation.topology.toLowerCase() === layout.toLowerCase())
             || selectedLayouts.length === 0),
     ).map((file, id) =>
-        <SimulationCard file={file} key={`simCard${id}`} id={id}/>,
+        <SimulationCard simulationDetail={file} key={`simCard${id}`} id={id}/>,
     );
   }, [moverRange, parsedSimulations, patientRange, selectedLayouts]);
 

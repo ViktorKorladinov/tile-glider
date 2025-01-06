@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
-import {parseSimulations} from "@/utils/simulation_folder_reader";
+import {parseSimulations} from "@/utils/simulationsFolderReader";
 import fs from "fs";
-import {createIcons} from "@/utils/misc";
+import {createIcons} from "@/utils/iconCreator";
 
 export async function GET() {
     const parsedSimulations = parseSimulations('public/simulations')

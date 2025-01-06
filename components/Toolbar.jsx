@@ -41,19 +41,21 @@ function Toolbar({counter, length, animate, setAnimate, consumeMove, medicineNam
                 type: 'UPDATE_MARKER',
                 position: counter
             }, '*');
-        console.log('sent')
     }, [ animate, counter, iframeItem])
 
     const handleGrid = () => {
         const iframeItem = gridIframe.current.contentWindow
-        // iframeItem.moveBarTo(1)
+        iframeItem.postMessage({
+            type: 'UPDATE_MARKER',
+            position: counter
+        }, '*');
         setContentWindow(iframeItem)
     }
 
     const showMedicine = () => {
         let splitMedicineName = medicineName.split(',').join(', ')
         if (medicineName.length !== 0)
-            return <div className="medicine">{splitMedicineName}</div>
+            return <div className="text-xs medicine">{splitMedicineName}</div>
     }
 
     return (<div className={barMode}>
@@ -62,6 +64,7 @@ function Toolbar({counter, length, animate, setAnimate, consumeMove, medicineNam
             <div className="toolbar">
                 <span>Frame: {counter}/{length - 1} </span>
                 {counter !== length ? <>
+                    <div className='flex gap-1'>
                     <button className={btnStates[0]} onClick={() => select(0, -2)}>Next Frame</button>
                     <button className={btnStates[1] + " separate"} onClick={() => select(1, 250)}>
                         <span>Play </span>
@@ -71,6 +74,7 @@ function Toolbar({counter, length, animate, setAnimate, consumeMove, medicineNam
                     <button className={btnStates[3]} onClick={() => select(3, 8)}><span>Fastest </span>
                     </button>
                     <button onClick={() => select(0, -1)}><span>Pause</span></button>
+                    </div>
                     <button
                         className="separate"
                         onClick={() => setBarMode(state => state === 'barAttached' ? 'barDetached' : 'barAttached')}>
