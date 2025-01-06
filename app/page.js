@@ -87,7 +87,7 @@ export default function Home() {
     </div>
 
     <div
-        className="grid grid-cols-[repeat(auto-fit,minmax(300px,1fr))] gap-5 justify-center p-5 w-[90%]">
+        className="grid grid-cols-[repeat(auto-fit,minmax(300px,1fr))] gap-5 justify-items-center p-5 w-[90%]">
       {renderSimulations()}
     </div>
   </div>);
