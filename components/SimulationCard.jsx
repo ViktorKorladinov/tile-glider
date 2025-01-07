@@ -19,7 +19,7 @@ const SimulationCard = ({simulationDetail}) => {
     {icon: <HiBeaker/>, label: 'Dose', value: simulationDetail.dose},
     {icon: <TbTruck/>, label: 'Movers', value: simulationDetail.movers},
     {icon: <TbUsers/>, label: 'Patients', value: simulationDetail.patients},
-    {icon: <TbGrid3X3/>, label: 'Tiles', value: n_tiles},
+    {icon: <TbGrid3X3/>, label: 'Tiles', value: n_tiles + n_interfaces},
     {
       icon: <MdOutlinePrecisionManufacturing/>,
       label: 'Interfaces',
@@ -37,7 +37,7 @@ const SimulationCard = ({simulationDetail}) => {
           onClick={() => router.push(`/${simulationDetail.id}/simulator`)}
           className="w-[300px] min-h-[350px] rounded-lg overflow-hidden shadow-md transition-shadow duration-200 bg-white hover:shadow-lg cursor-pointer"
       >
-        <div className="bg-blue-200 p-2 text-gray-800">
+        <div className="relative bg-blue-200 p-2 text-gray-800">
           <h2 className="m-0 text-xl font-medium capitalize">{topology} simulation</h2>
         </div>
         <div className="card-content p-4 flex flex-col justify-between h-[90%]">
