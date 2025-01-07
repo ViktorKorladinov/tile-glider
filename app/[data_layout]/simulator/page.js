@@ -31,9 +31,8 @@ export default function Simulator() {
     }
     return (
         <main>
-
-            <div id="logo">
-                <Image id="aa" fill={true} alt="CIIRC Logo" src={"../ciirc.svg"} />
+            <div className="absolute left-4 w-28 h-28">
+                <Image id="aa" fill={true} alt="CIIRC Logo" src={"../../ciirc.svg"} />
             </div>
             <section className="gridHolder">
                 <Grid n={size.n} m={size.m} fill={size.fill} simulationData={simulationData} />
