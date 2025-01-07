@@ -31,20 +31,25 @@ export default function Home() {
 
   const renderSimulations = useCallback(() => {
     // if (parsedSimulations.length === 0) return (<h2>No simulations to be shown</h2>);
-    return parsedSimulations.filter(simulation => patientRange.some(
-        patientRange => simulation.patients >= patientRange.start &&
-            simulation.patients <= patientRange.end) && moverRange.some(
-        moverRange => simulation.movers >= moverRange.start &&
-            simulation.movers <= moverRange.end) && (selectedLayouts.some(
-            layout => simulation.topology.toLowerCase() === layout.toLowerCase()) ||
-        selectedLayouts.length === 0)).
-        map((file, id) => <SimulationCard simulationDetail={file}
+    return parsedSimulations
+    // .filter(simulation => patientRange.some(
+    //         patientRange => simulation.patients >= patientRange.start &&
+    //             simulation.patients <= patientRange.end)
+    //     &&
+    //     moverRange.some(moverRange => simulation.movers >= moverRange.start &&
+    //         simulation.movers <= moverRange.end)
+    //     && (
+    //         selectedLayouts.some(layout => simulation.topology.toLowerCase() ===
+    //             layout.toLowerCase())
+    //         ||
+    //         selectedLayouts.length === 0))
+    .map((file, id) => <SimulationCard simulationDetail={file}
                                           key={`simCard${id}`} id={id}/>);
   }, [moverRange, parsedSimulations, patientRange, selectedLayouts]);
 
   return (<>
     <div className="absolute left-4 w-28 h-28">
-      <Image id="aa" fill={true} alt="CIIRC Logo" src='/ciirc.svg'/>
+      <Image id="aa" fill={true} alt="CIIRC Logo" src="/ciirc.svg"/>
     </div>
     <div className="flex flex-col items-center justify-center">
 

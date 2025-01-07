@@ -15,11 +15,23 @@ function extractSimulationData(simulationFolder) {
   try {
     const resultsData = JSON.parse(fs.readFileSync(resultsFilePath, 'utf8'));
     const {dose, movers, patients} = resultsData.config;
-    const topology = resultsData.config['topology_info'].topology;
+    const topologyInfo = resultsData.config['topology_info'];
+    const filteredTopologyInfo = {
+      'topology': topologyInfo.topology,
+      'n_tiles': topologyInfo.n_tiles,
+      'n_interfaces': topologyInfo.n_interfaces,
+      'n_dispensers': topologyInfo.n_dispensers,
+    };
     let calculated_at = 'unknown';
     if (resultsData.results['calculated_at'])
       calculated_at = resultsData.results['calculated_at'];
-    return {dose, movers, patients, topology, calculated_at};
+    return {
+      dose,
+      movers,
+      patients,
+      'topologyInfo': filteredTopologyInfo,
+      calculated_at,
+    };
   } catch (error) {
     console.error(`Error reading results.json for ${simulationFolder}:`, error);
     return null;
