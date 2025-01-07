@@ -3,9 +3,10 @@ import {useEffect, useState} from "react"
 import '../../../styles/grid.css'
 import Grid from "../../../components/Grid";
 import Image from "next/image";
-import { useParams } from 'next/navigation'
+import {useParams, useRouter} from 'next/navigation';
 
 export default function Simulator() {
+    const router = useRouter();
     const [simulationData, setSimData] = useState();
     const [size, setSize] = useState({ n: 0, m: 0, fill: false });
     const params = useParams()
@@ -31,7 +32,7 @@ export default function Simulator() {
     }
     return (
         <main>
-            <div className="absolute left-4 w-28 h-28">
+            <div onClick={()=>router.push('/')} className="hover:cursor-pointer absolute left-4 w-28 h-28">
                 <Image id="aa" fill={true} alt="CIIRC Logo" src={"../../ciirc.svg"} />
             </div>
             <section className="gridHolder">

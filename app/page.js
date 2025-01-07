@@ -4,8 +4,10 @@ import '@/styles/portal.css';
 import SimulationCard from '@/components/SimulationCard';
 import SegmentedRange from '@/components/FilterCategories/SegmentedRange';
 import Image from 'next/image';
+import {useRouter} from 'next/navigation';
 
 export default function Home() {
+  const router = useRouter();
   const [parsedSimulations, setParsedSimulations] = useState([]);
   const [selectedLayouts, setSelectedLayouts] = useState([]);
   const [patientRange, setPatientRange] = useState([0, 100]);
@@ -48,7 +50,7 @@ export default function Home() {
   }, [moverRange, parsedSimulations, patientRange, selectedLayouts]);
 
   return (<>
-    <div className="absolute left-4 w-28 h-28">
+    <div onClick={()=>router.push('/')} className="hover:cursor-pointer absolute left-4 w-28 h-28">
       <Image id="aa" fill={true} alt="CIIRC Logo" src="/ciirc.svg"/>
     </div>
     <div className="flex flex-col items-center justify-center">
