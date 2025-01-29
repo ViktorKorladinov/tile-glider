@@ -5,8 +5,7 @@ import {useState, useEffect, useRef, useCallback} from 'react';
 import {animated, useSprings} from '@react-spring/web';
 import Tile from './Tile';
 import Toolbar from './Toolbar';
-import { useMemo } from "react";
-
+import {useMemo} from 'react';
 
 const CELL_SIZE = 240;
 const MOVER_SIZE = 112;
@@ -22,17 +21,15 @@ export default function Grid({m, n, simulationData, fill}) {
     const logicalToExactPos = (allPaths) => {
       return allPaths.map(moverPath => {
         return moverPath.map(pos => {
-          let newPos = { ...pos };
+          let newPos = {...pos};
           newPos.logicalX = pos.x;
           newPos.logicalY = pos.y;
-          switch (pos.mode) {
-            case 'wait_rest':
-              newPos.x = pos.x * CELL_SIZE + CELL_SIZE / 2 - MOVER_SIZE / 2;
-              newPos.y = pos.y * CELL_SIZE + CELL_SIZE / 2 - MOVER_SIZE / 2;
-              break;
-            default:
-              newPos.x = pos.x * CELL_SIZE + CELL_SIZE / 2 - MOVER_SIZE / 2;
-              newPos.y = pos.y * CELL_SIZE + CELL_SIZE / 2 - MOVER_SIZE / 2;
+          newPos.x = pos.x * CELL_SIZE + CELL_SIZE / 2 - MOVER_SIZE / 2;
+          newPos.y = pos.y * CELL_SIZE + CELL_SIZE / 2 - MOVER_SIZE / 2;
+          if (pos.mode === 'wait_rest') {
+            newPos.x += pos['rest_offset_x'] * CELL_SIZE / 2;
+            newPos.y += pos['rest_offset_y'] * CELL_SIZE / 2;
+
           }
           return newPos;
         });
@@ -41,7 +38,6 @@ export default function Grid({m, n, simulationData, fill}) {
 
     return logicalToExactPos(simulationDatumElement);
   }, [simulationDatumElement]);
-
 
   const [counter, setCounter] = useState(1);
   const [speed, setSpeed] = useState(0);
