@@ -5,6 +5,8 @@ import {useState, useEffect, useRef, useCallback} from 'react';
 import {animated, useSprings} from '@react-spring/web';
 import Tile from './Tile';
 import Toolbar from './Toolbar';
+import { useMemo } from "react";
+
 
 const CELL_SIZE = 240;
 const MOVER_SIZE = 112;
@@ -14,7 +16,6 @@ export default function Grid({m, n, simulationData, fill}) {
   const dispenserInfo = simulationData['dispensers'];
   const patientColors = simulationData['patient_color_dict'];
   const ganttData = simulationData['gantts'];
-  import { useMemo } from "react";
 
   let simulationDatumElement = simulationData['mover_paths']['paths'];
   const positions = useMemo(() => {
