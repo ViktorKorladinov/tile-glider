@@ -213,7 +213,7 @@ export default function Grid({m, n, simulationData, fill}) {
             <animated.rect key={`mover${id}`} x={spring['x']} y={spring['y']}
                            width={MOVER_SIZE} height={MOVER_SIZE} style={{
               fill: `url(#bgPattern${id})`,
-            }} rx="15"/>);
+            }} rx="15">{id}</animated.rect>);
       })}
     </svg>
     <Toolbar counter={counter} length={positions[0].length} animate={speed}
