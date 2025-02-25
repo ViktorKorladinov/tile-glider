@@ -36,7 +36,8 @@ function extractSimulationData(simulationFolder) {{
           topologyInfo['n_dispensers'] = topologyInfo['n_tiles'];
         }
       }else{
-        console.log('present!');
+        // no need to calculate the amount of dispensers, information is already there
+        // console.log('present!');
       }
 
       const filteredTopologyInfo = {
