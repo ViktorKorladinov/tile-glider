@@ -10,7 +10,7 @@ const Tile = memo(function NonMemoTile({
   selected,
   maxPath,
   setMedicine,
-  name = 'Interface',
+  name = 'unavailable',
   speed,
 }) {
   let color = getColorFromGradient(idx, maxPath);
@@ -18,9 +18,12 @@ const Tile = memo(function NonMemoTile({
   if (selected === 1) {
     color = 'lightgreen';
     tileType += 'selected';
-  } else if (name === 'Interface') {
+  } else if (name === 'interface') {
     tileType += ' interface';
     color = 'lightblue';
+  } else if (name === 'unavailable') {
+    tileType += ' unavailable';
+    color = 'lightgrey';
   }
   const [stateY, setStateY] = useState(y);
   const [stateX, setStateX] = useState(x);
